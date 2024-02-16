@@ -38,20 +38,34 @@ export default function TransactionsFilter({
         <span>From:</span>
         <div className={styles.fieldContainer}>
           <DatePicker
+            key="fromDate"
             format="DD/MM/YYYY"
             value={fromDate}
             onChange={(newDate: Date | null) => (fromDate = dayjs(newDate))}
+            slotProps={{
+              textField: {
+                inputProps: { 'data-testid': 'fromDate' },
+              },
+            }}
           />
         </div>
         <span>To:</span>
         <div className={styles.fieldContainer}>
           <DatePicker
+            key="toDate"
             format="DD/MM/YYYY"
             value={toDate}
             onChange={(newDate: Date | null) => (toDate = dayjs(newDate))}
+            slotProps={{
+              textField: {
+                inputProps: { 'data-testid': 'toDate' },
+              },
+            }}
           />
         </div>
-        <Button onClick={handleFiltered}>Filter</Button>
+        <Button data-testid="filterButton" onClick={handleFiltered}>
+          Filter
+        </Button>
       </div>
     </LocalizationProvider>
   );

@@ -1,5 +1,3 @@
-import styles from '@/app/ui/css/transactions.module.css';
-
 import { Suspense } from 'react';
 import { Skeleton } from '@mui/material';
 import TransactionsFilter from './components/transactions-filter';
@@ -23,7 +21,13 @@ export default function Transactions({
       />
       <Suspense
         key={'transactionsTablePlaceholder' + from + to}
-        fallback={<Skeleton variant="rounded" height={600} />}
+        fallback={
+          <Skeleton
+            variant="rounded"
+            height={600}
+            data-testid="transactionsTablePlaceholder"
+          />
+        }
       >
         <TransactionsTable
           fromDate={from}
