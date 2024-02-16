@@ -1,0 +1,13 @@
+.filterContainer {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.filterContainer .fieldContainer {
+  padding: 0 10px;
+}
+
+.tablePlaceholder {
+  height: 600px;
+}
