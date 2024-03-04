@@ -9,15 +9,13 @@ export const formatCurrency = (amount: number, currency: string) => {
 export const formatDateToLocal = (
   dateStr: string,
   locale: string = 'en-US',
-) => {
-  const date = new Date(dateStr);
+): string => {
   const options: Intl.DateTimeFormatOptions = {
     day: 'numeric',
-    month: 'short',
-    year: 'numeric',
+    month: 'numeric',
   };
   const formatter = new Intl.DateTimeFormat(locale, options);
-  return formatter.format(date);
+  return formatter.format(new Date(dateStr));
 };
 
 export const generatePagination = (currentPage: number, totalPages: number) => {

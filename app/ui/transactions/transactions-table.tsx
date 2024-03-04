@@ -15,6 +15,7 @@ import {
 } from '@/app/ui/components/buttons';
 
 import { Dayjs } from 'dayjs';
+import { Chip } from '@mui/material';
 
 export default async function TransactionsTable({
   fromDate,
@@ -52,28 +53,43 @@ export default async function TransactionsTable({
           </StyledTableRow>
         </TableHead>
         <TableBody>
-          {transactions.Items?.map((transaction, index) => (
-            <StyledTableRow
-              key={index}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <StyledTableCell align="left" variant="body">
-                {formatDateToLocal(transaction.Date)}
-              </StyledTableCell>
-              <StyledTableCell align="left" variant="body">
-                {formatCurrency(transaction.Amount, 'RON')}
-              </StyledTableCell>
-              <StyledTableCell align="left" variant="body">
-                {Array.from(transaction.Tags).join(', ')}
-              </StyledTableCell>
-              <StyledTableCell align="left" variant="body">
-                <div className="flex justify-end gap-2">
-                  <UpdateTransaction id={''} />
-                  <DeleteTransaction id={''} />
-                </div>
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
+          {transactions.map((transaction, index) => {
+            const rangeKeyTokens: string[] = transaction.SK.split('#');
+            const transactionId: string =
+              rangeKeyTokens.length == 3
+                ? `${rangeKeyTokens[1]}_${rangeKeyTokens[2]}`
+                : '-';
+            return (
+              <StyledTableRow
+                key={index}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <StyledTableCell align="left" variant="body">
+                  {formatDateToLocal(transaction.Date)}
+                </StyledTableCell>
+                <StyledTableCell align="left" variant="body">
+                  {formatCurrency(transaction.Amount, 'RON')}
+                </StyledTableCell>
+                <StyledTableCell align="left" variant="body">
+                  {transaction.Tags.map((tag) => {
+                    return (
+                      <Chip
+                        variant="outlined"
+                        sx={{ marginRight: '5px' }}
+                        key={tag}
+                        label={tag}
+                      />
+                    );
+                  })}
+                </StyledTableCell>
+                <StyledTableCell align="left" variant="body">
+                  <div className="flex justify-end gap-2">
+                    <UpdateTransaction id={transactionId} />
+                  </div>
+                </StyledTableCell>
+              </StyledTableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>
