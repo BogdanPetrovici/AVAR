@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { Skeleton } from '@mui/material';
-import TransactionsFilter from './components/transactions-filter';
-import TransactionsTable from './transactions-table';
+import TransactionsFilter from '@/app/ui/transactions/transactions-filter';
+import TransactionsTable from '@/app/ui/transactions/transactions-table';
 import { Dayjs } from 'dayjs';
 
 export default function Transactions({

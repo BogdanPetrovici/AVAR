@@ -27,8 +27,8 @@ export default function TransactionsFilter({
 
   function handleFiltered() {
     const params = new URLSearchParams(searchParams);
-    params.set('from', fromDate.format('DD-MM-YYYY'));
-    params.set('to', toDate.format('DD-MM-YYYY'));
+    params.set('from', fromDate.format('YYYY-MM-DD'));
+    params.set('to', toDate.format('YYYY-MM-DD'));
     replace(`${pathname}?${params.toString()}`);
   }
 
@@ -39,7 +39,7 @@ export default function TransactionsFilter({
         <div className={styles.fieldContainer}>
           <DatePicker
             key="fromDate"
-            format="DD/MM/YYYY"
+            format="YYYY-MM-DD"
             value={fromDate}
             onChange={(newDate: Date | null) => (fromDate = dayjs(newDate))}
             slotProps={{
@@ -53,7 +53,7 @@ export default function TransactionsFilter({
         <div className={styles.fieldContainer}>
           <DatePicker
             key="toDate"
-            format="DD/MM/YYYY"
+            format="YYYY-MM-DD"
             value={toDate}
             onChange={(newDate: Date | null) => (toDate = dayjs(newDate))}
             slotProps={{
@@ -63,7 +63,11 @@ export default function TransactionsFilter({
             }}
           />
         </div>
-        <Button data-testid="filterButton" onClick={handleFiltered}>
+        <Button
+          data-testid="filterButton"
+          variant="outlined"
+          onClick={handleFiltered}
+        >
           Filter
         </Button>
       </div>
