@@ -1,7 +1,11 @@
 'use server';
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DeleteCommand,
+  DynamoDBDocumentClient,
+  UpdateCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
@@ -56,6 +60,29 @@ export async function updateTransaction(id: string, formData: FormData) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error(`Failed to update transaction ${id}`);
+  }
+
+  revalidatePath('/transactions');
+  redirect('/transactions');
+}
+
+export async function deleteTransaction(id: string) {
+  try {
+    const client = new DynamoDBClient({
+      endpoint: 'http://localhost:8000',
+      region: 'eu-central-1',
+      credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
+    });
+    const docClient = DynamoDBDocumentClient.from(client);
+    const command = new DeleteCommand({
+      TableName: 'Transactions',
+      Key: { PK: 'User#Account1', SK: id },
+    });
+
+    const response = await docClient.send(command);
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to delete transaction ${id}`);
   }
 
   revalidatePath('/transactions');
