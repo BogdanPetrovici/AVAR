@@ -1,3 +1,5 @@
+import styles from '@/app/ui/css/transactions.module.css';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableHead from '@mui/material/TableHead';
@@ -9,10 +11,7 @@ import Paper from '@mui/material/Paper';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchLatestTransactions } from '@/app/lib/data';
 
-import {
-  DeleteTransaction,
-  UpdateTransaction,
-} from '@/app/ui/components/buttons';
+import { UpdateTransaction } from '@/app/ui/components/buttons';
 
 import { Dayjs } from 'dayjs';
 import { Chip } from '@mui/material';
@@ -33,6 +32,7 @@ export default async function TransactionsTable({
         borderRadius: '0.5rem',
         backgroundColor: '#F9FAFBFF',
         padding: '0.5rem',
+        marginTop: '1.5rem',
       }}
       component={Paper}
       elevation={0}
@@ -83,7 +83,7 @@ export default async function TransactionsTable({
                   })}
                 </StyledTableCell>
                 <StyledTableCell align="left" variant="body">
-                  <div className="flex justify-end gap-2">
+                  <div className={styles.editButtonContainer}>
                     <UpdateTransaction id={transactionId} />
                   </div>
                 </StyledTableCell>

@@ -2,6 +2,8 @@
 
 import dayjs from 'dayjs';
 
+import styles from '@/app/ui/css/transaction.module.css';
+
 import { Autocomplete, Box, Button, Chip, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -39,8 +41,8 @@ export default function EditForm({
         autoComplete="off"
         action={handleUpdateTransaction}
       >
-        <div className="rounded-md bg-gray-50 p-4 md:p-6">
-          <div className="mb-4">
+        <div className={styles.formContainer}>
+          <div className={styles.fieldContainer}>
             <DatePicker
               name="transaction-date"
               key="transaction-date"
@@ -49,15 +51,18 @@ export default function EditForm({
               defaultValue={dayjs(transaction.Date)}
               slotProps={{
                 textField: {
-                  inputProps: { 'data-testid': 'transaction-date' },
+                  inputProps: {
+                    'data-testid': 'transaction-date',
+                  },
                   InputLabelProps: {
                     shrink: true,
                   },
                 },
               }}
+              sx={{ width: '100%' }}
             />
           </div>
-          <div className="mb-4">
+          <div className={styles.fieldContainer}>
             <TextField
               name="transaction-amount"
               id="transaction-amount"
@@ -68,9 +73,10 @@ export default function EditForm({
               InputLabelProps={{
                 shrink: true,
               }}
+              sx={{ width: '100%' }}
             />
           </div>
-          <div className="mb-4">
+          <div className={styles.fieldContainer}>
             <TextField
               name="transaction-description"
               id="transaction-description"
@@ -82,9 +88,10 @@ export default function EditForm({
               InputLabelProps={{
                 shrink: true,
               }}
+              sx={{ width: '100%' }}
             />
           </div>
-          <div className="mb-4">
+          <div className={styles.fieldContainer}>
             <Autocomplete
               multiple
               id="transaction-tags"
@@ -125,7 +132,7 @@ export default function EditForm({
             />
           </div>
         </div>
-        <div className="mt-6 flex justify-end gap-4">
+        <div className={styles.buttonContainer}>
           <Link href="/transactions">
             <Button data-testid="edit-cancel" variant="outlined">
               Cancel

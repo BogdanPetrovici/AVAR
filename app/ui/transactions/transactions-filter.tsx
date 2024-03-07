@@ -35,33 +35,53 @@ export default function TransactionsFilter({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className={styles.filterContainer}>
-        <span>From:</span>
-        <div className={styles.fieldContainer}>
-          <DatePicker
-            key="fromDate"
-            format="YYYY-MM-DD"
-            value={fromDate}
-            onChange={(newDate: Date | null) => (fromDate = dayjs(newDate))}
-            slotProps={{
-              textField: {
-                inputProps: { 'data-testid': 'fromDate' },
-              },
-            }}
-          />
-        </div>
-        <span>To:</span>
-        <div className={styles.fieldContainer}>
-          <DatePicker
-            key="toDate"
-            format="YYYY-MM-DD"
-            value={toDate}
-            onChange={(newDate: Date | null) => (toDate = dayjs(newDate))}
-            slotProps={{
-              textField: {
-                inputProps: { 'data-testid': 'toDate' },
-              },
-            }}
-          />
+        <div className={styles.filterInputContainer}>
+          <span className={styles.filterInputLabel}>From:</span>
+          <div className={styles.fieldContainer}>
+            <DatePicker
+              key="fromDate"
+              format="YYYY-MM-DD"
+              value={fromDate}
+              onChange={(newDate: Date | null) => (fromDate = dayjs(newDate))}
+              slotProps={{
+                textField: {
+                  inputProps: {
+                    'data-testid': 'fromDate',
+                    sx: {
+                      borderColor: 'rgb(229 231 235 /1)',
+                      fontSize: '0.875rem',
+                      lineHeight: '1.25rem',
+                      padding: '9px 0px 9px 14px',
+                      outlineWidth: '2px',
+                    },
+                  },
+                },
+              }}
+            />
+          </div>
+          <span className={styles.filterInputLabel}>To:</span>
+          <div className={styles.fieldContainer}>
+            <DatePicker
+              key="toDate"
+              format="YYYY-MM-DD"
+              value={toDate}
+              onChange={(newDate: Date | null) => (toDate = dayjs(newDate))}
+              slotProps={{
+                textField: {
+                  inputProps: {
+                    'data-testid': 'toDate',
+                    sx: {
+                      borderColor: 'rgb(229 231 235 /1)',
+                      fontSize: '0.875rem',
+                      lineHeight: '1.25rem',
+                      padding: '9px 0px 9px 14px',
+                      outlineWidth: '2px',
+                    },
+                  },
+                },
+              }}
+            />
+          </div>
         </div>
         <Button
           data-testid="filterButton"

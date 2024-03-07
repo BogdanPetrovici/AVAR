@@ -1,3 +1,5 @@
+import styles from '@/app/ui/css/page.module.css';
+
 export default async function Page() {
-  return <div className="w-full">Dashboard</div>;
+  return <main className={styles.pageContainer}>Dashboard</main>;
 }

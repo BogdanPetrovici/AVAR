@@ -1,0 +1,23 @@
+.formContainer {
+  margin-top: 1.5rem;
+  border-radius: 0.375rem;
+  background-color: rgb(249 250 251 / 1);
+  padding: 1rem;
+}
+
+.fieldContainer {
+  margin-bottom: 1rem;
+}
+
+.buttonContainer {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+@media only screen and (min-width: 768px) {
+  .formContainer {
+    padding: 1.5rem;
+  }
+}

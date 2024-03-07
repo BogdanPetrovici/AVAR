@@ -1,3 +1,5 @@
+import styles from '@/app/ui/css/page.module.css';
+
 import { getTags, getTransactionById } from '@/app/lib/data';
 import { lusitana } from '@/app/ui/fonts';
 import DeleteForm from '@/app/ui/transactions/delete-form';
@@ -10,14 +12,16 @@ export default async function Page({ params }: { params: { id: string } }) {
   ]);
 
   return (
-    <div className="w-full">
-      <div className="mb-4 flex items-center justify-between">
+    <main className={styles.pageContainer}>
+      <header className={styles.pageHeading}>
         <div>
-          <h1 className={`${lusitana.className} text-2xl`}>Edit transaction</h1>
+          <h1 className={`${lusitana.className} ${styles.headingText}`}>
+            Edit transaction
+          </h1>
         </div>
         <DeleteForm transaction={transaction} />
-      </div>
+      </header>
       <EditForm transaction={transaction} tags={tags} />
-    </div>
+    </main>
   );
 }
