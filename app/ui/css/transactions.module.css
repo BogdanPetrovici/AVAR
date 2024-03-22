@@ -2,15 +2,12 @@
   display: flex;
   margin-top: 1rem;
   align-items: center;
-  justify-content: space-between;
   gap: 0.5rem;
 }
 
 .filterInputContainer {
   position: relative;
   display: flex;
-  flex: 1 1 0%;
-  flex-shrink: 0;
   align-items: center;
 }
 

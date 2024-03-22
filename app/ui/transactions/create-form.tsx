@@ -11,40 +11,38 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 
 import Link from 'next/link';
 
-import { Transaction } from '@/app/lib/model/transaction';
 import { Tag } from '@/app/lib/model/tag';
-import { updateTransaction } from '@/app/lib/actions';
+import { createTransaction, State } from '@/app/lib/actions';
 import { useState } from 'react';
+import { useFormState } from 'react-dom';
 
-export default function EditForm({
-  transaction,
-  tags,
-}: {
-  transaction: Transaction;
-  tags: Tag[];
-}) {
+export default function CreateForm({ tags }: { tags: Tag[] }) {
   const filteredTags = tags.filter((tag) => Boolean(tag.Name));
-  const [selectedTags, setSelectedTags] = useState(transaction.Tags);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  function handleUpdateTransaction(formData: FormData) {
+  const initialState = { message: null, errors: {} };
+  const [formState, formAction] = useFormState(
+    handleCreateTransaction,
+    initialState,
+  );
+
+  async function handleCreateTransaction(
+    previousState: State,
+    formData: FormData,
+  ) {
     selectedTags.map((selectedTag) => {
-      formData.append(`transaction-tags`, selectedTag);
+      formData.append('transaction-tags', selectedTag);
       if (tags.find((tag) => tag.Name === selectedTag) === undefined) {
         formData.append('new-transaction-tags', selectedTag);
       }
     });
 
-    updateTransaction(transaction.SK, formData);
+    return await createTransaction(previousState, formData);
   }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box
-        component="form"
-        noValidate
-        autoComplete="off"
-        action={handleUpdateTransaction}
-      >
+      <Box component="form" noValidate autoComplete="off" action={formAction}>
         <div className={styles.formContainer}>
           <div className={styles.fieldContainer}>
             <DatePicker
@@ -52,7 +50,6 @@ export default function EditForm({
               key="transaction-date"
               format="YYYY-MM-DD"
               label="Date"
-              defaultValue={dayjs(transaction.Date)}
               slotProps={{
                 textField: {
                   inputProps: {
@@ -61,6 +58,8 @@ export default function EditForm({
                   InputLabelProps: {
                     shrink: true,
                   },
+                  error: formState.errors?.Date !== undefined,
+                  helperText: formState.errors?.Date,
                 },
               }}
               sx={{ width: '100%' }}
@@ -73,11 +72,12 @@ export default function EditForm({
               label="Amount"
               variant="outlined"
               type="number"
-              defaultValue={transaction.Amount}
               InputLabelProps={{
                 shrink: true,
               }}
               sx={{ width: '100%' }}
+              error={formState.errors?.Amount !== undefined}
+              helperText={formState.errors?.Amount}
             />
           </div>
           <div className={styles.fieldContainer}>
@@ -88,7 +88,6 @@ export default function EditForm({
               variant="outlined"
               rows={4}
               multiline
-              defaultValue={transaction.Description}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -100,9 +99,11 @@ export default function EditForm({
               multiple
               id="transaction-tags"
               options={filteredTags.map((option) => option.Name)}
-              defaultValue={transaction.Tags}
               onChange={(e, value) => {
                 setSelectedTags(value);
+              }}
+              onInputChange={(e, value, reason) => {
+                console.log(`Value: ${value} Reason: ${reason}`);
               }}
               freeSolo
               renderTags={(value: readonly string[], getTagProps) =>
@@ -131,6 +132,8 @@ export default function EditForm({
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  error={formState.errors?.Tags !== undefined}
+                  helperText={formState.errors?.Tags}
                 />
               )}
             />
@@ -143,7 +146,7 @@ export default function EditForm({
             </Button>
           </Link>
           <Button data-testid="edit-submit" variant="contained" type="submit">
-            Edit transaction
+            Create transaction
           </Button>
         </div>
       </Box>

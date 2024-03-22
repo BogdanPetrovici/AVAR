@@ -110,7 +110,7 @@ export async function getTags() {
       TableName: 'Transactions',
       KeyConditionExpression: 'PK = :pk',
       ExpressionAttributeValues: {
-        ':pk': 'Tag#User1',
+        ':pk': 'User#Account1',
       },
       ConsistentRead: false,
       ScanIndexForward: false,
