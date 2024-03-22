@@ -13,8 +13,9 @@ import Link from 'next/link';
 
 import { Transaction } from '@/app/lib/model/transaction';
 import { Tag } from '@/app/lib/model/tag';
-import { updateTransaction } from '@/app/lib/actions';
+import { updateTransaction, State } from '@/app/lib/actions';
 import { useState } from 'react';
+import { useFormState } from 'react-dom';
 
 export default function EditForm({
   transaction,
@@ -26,7 +27,13 @@ export default function EditForm({
   const filteredTags = tags.filter((tag) => Boolean(tag.Name));
   const [selectedTags, setSelectedTags] = useState(transaction.Tags);
 
-  function handleUpdateTransaction(formData: FormData) {
+  const initialState = { message: null, errors: {} };
+  const [formState, formAction] = useFormState(
+    handleUpdateTransaction,
+    initialState,
+  );
+
+  async function handleUpdateTransaction(prevState: State, formData: FormData) {
     selectedTags.map((selectedTag) => {
       formData.append(`transaction-tags`, selectedTag);
       if (tags.find((tag) => tag.Name === selectedTag) === undefined) {
@@ -34,17 +41,12 @@ export default function EditForm({
       }
     });
 
-    updateTransaction(transaction.SK, formData);
+    return await updateTransaction(transaction.SK, prevState, formData);
   }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box
-        component="form"
-        noValidate
-        autoComplete="off"
-        action={handleUpdateTransaction}
-      >
+      <Box component="form" noValidate autoComplete="off" action={formAction}>
         <div className={styles.formContainer}>
           <div className={styles.fieldContainer}>
             <DatePicker
@@ -61,6 +63,8 @@ export default function EditForm({
                   InputLabelProps: {
                     shrink: true,
                   },
+                  error: formState.errors?.Date !== undefined,
+                  helperText: formState.errors?.Date,
                 },
               }}
               sx={{ width: '100%' }}
@@ -78,6 +82,8 @@ export default function EditForm({
                 shrink: true,
               }}
               sx={{ width: '100%' }}
+              error={formState.errors?.Amount !== undefined}
+              helperText={formState.errors?.Amount}
             />
           </div>
           <div className={styles.fieldContainer}>
@@ -131,6 +137,8 @@ export default function EditForm({
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  error={formState.errors?.Tags !== undefined}
+                  helperText={formState.errors?.Tags}
                 />
               )}
             />

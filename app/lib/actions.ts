@@ -40,8 +40,10 @@ const FormSchema = z.object({
     .max(4, { message: 'You can select 4 tags, at most' }),
 });
 
+const CreateTransaction = FormSchema.omit({ PK: true, SK: true });
+
 export async function createTransaction(prevState: State, formData: FormData) {
-  const validatedFields = UpdateTransaction.safeParse({
+  const validatedFields = CreateTransaction.safeParse({
     Date: formData.get('transaction-date'),
     Amount: formData.get('transaction-amount'),
     Description: formData.get('transaction-description'),
@@ -96,14 +98,25 @@ export async function createTransaction(prevState: State, formData: FormData) {
 
 const UpdateTransaction = FormSchema.omit({ PK: true, SK: true });
 
-export async function updateTransaction(id: string, formData: FormData) {
+export async function updateTransaction(
+  id: string,
+  prevState: State,
+  formData: FormData,
+) {
   try {
-    const { Date, Amount, Description, Tags } = UpdateTransaction.parse({
+    const validatedFields = UpdateTransaction.safeParse({
       Date: formData.get('transaction-date'),
       Amount: formData.get('transaction-amount'),
       Description: formData.get('transaction-description'),
       Tags: formData.getAll('transaction-tags'),
     });
+
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: 'Missing Fields. Failed to Update transaction.',
+      };
+    }
 
     const client = new DynamoDBClient({
       endpoint: 'http://localhost:8000',
@@ -111,13 +124,16 @@ export async function updateTransaction(id: string, formData: FormData) {
       credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
     });
     const docClient = DynamoDBDocumentClient.from(client);
+
+    const { Date, Amount, Description, Tags } = validatedFields.data;
+    const formattedDate = dayjs(Date).format('YYYY-MM-DD');
     const command = new UpdateCommand({
       TableName: 'Transactions',
       Key: { PK: 'User#Account1', SK: id },
       UpdateExpression:
         'set #date=:date, #amount=:amount, #description=:description, #tags=:tags',
       ExpressionAttributeValues: {
-        ':date': Date,
+        ':date': formattedDate,
         ':amount': Amount,
         ':description': Description,
         ':tags': new Set(Tags),
