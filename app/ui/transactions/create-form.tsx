@@ -25,7 +25,7 @@ export default function CreateForm({ tags }: { tags: Tag[] }) {
     handleCreateTransaction,
     initialState,
   );
-  console.log(formState);
+
   async function handleCreateTransaction(
     previousState: State,
     formData: FormData,
@@ -103,9 +103,6 @@ export default function CreateForm({ tags }: { tags: Tag[] }) {
               options={filteredTags.map((option) => option.Name)}
               onChange={(e, value) => {
                 setSelectedTags(value);
-              }}
-              onInputChange={(e, value, reason) => {
-                console.log(`Value: ${value} Reason: ${reason}`);
               }}
               freeSolo
               renderTags={(value: readonly string[], getTagProps) =>
