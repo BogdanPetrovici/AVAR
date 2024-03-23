@@ -11,37 +11,33 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 
 import Link from 'next/link';
 
-import { Transaction } from '@/app/lib/model/transaction';
 import { Tag } from '@/app/lib/model/tag';
-import { updateTransaction, State } from '@/app/lib/actions';
+import { createTransaction, State } from '@/app/lib/actions';
 import { useState } from 'react';
 import { useFormState } from 'react-dom';
 
-export default function EditForm({
-  transaction,
-  tags,
-}: {
-  transaction: Transaction;
-  tags: Tag[];
-}) {
+export default function CreateForm({ tags }: { tags: Tag[] }) {
   const filteredTags = tags.filter((tag) => Boolean(tag.Name));
-  const [selectedTags, setSelectedTags] = useState(transaction.Tags);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const initialState = { message: null, errors: {} };
   const [formState, formAction] = useFormState(
-    handleUpdateTransaction,
+    handleCreateTransaction,
     initialState,
   );
 
-  async function handleUpdateTransaction(prevState: State, formData: FormData) {
+  async function handleCreateTransaction(
+    previousState: State,
+    formData: FormData,
+  ) {
     selectedTags.map((selectedTag) => {
-      formData.append(`transaction-tags`, selectedTag);
+      formData.append('transaction-tags', selectedTag);
       if (tags.find((tag) => tag.Name === selectedTag) === undefined) {
         formData.append('new-transaction-tags', selectedTag);
       }
     });
 
-    return await updateTransaction(transaction.SK, prevState, formData);
+    return await createTransaction(previousState, formData);
   }
 
   return (
@@ -54,7 +50,6 @@ export default function EditForm({
               key="transaction-date"
               format="YYYY-MM-DD"
               label="Date"
-              defaultValue={dayjs(transaction.Date)}
               slotProps={{
                 textField: {
                   inputProps: {
@@ -77,7 +72,6 @@ export default function EditForm({
               label="Amount"
               variant="outlined"
               type="number"
-              defaultValue={transaction.Amount}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -94,7 +88,6 @@ export default function EditForm({
               variant="outlined"
               rows={4}
               multiline
-              defaultValue={transaction.Description}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -108,7 +101,6 @@ export default function EditForm({
               multiple
               id="transaction-tags"
               options={filteredTags.map((option) => option.Name)}
-              defaultValue={transaction.Tags}
               onChange={(e, value) => {
                 setSelectedTags(value);
               }}
@@ -153,7 +145,7 @@ export default function EditForm({
             </Button>
           </Link>
           <Button data-testid="edit-submit" variant="contained" type="submit">
-            Edit transaction
+            Create transaction
           </Button>
         </div>
       </Box>
