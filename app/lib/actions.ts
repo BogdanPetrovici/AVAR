@@ -18,6 +18,7 @@ export type State = {
   errors?: {
     Date?: string[];
     Amount?: string[];
+    Description?: string[];
     Tags?: string[];
   };
   message?: string | null;
@@ -32,10 +33,17 @@ const FormSchema = z.object({
   }),
   Amount: z.coerce
     .number({ required_error: 'Please select an amount.' })
-    .gt(0, { message: 'Please enter an amount greater than 0.' }),
-  Description: z.string(),
+    .gt(0, { message: 'Please enter an amount greater than 0.' })
+    .lt(100000, { message: 'Amount must be lower than 100000' }),
+  Description: z
+    .string()
+    .max(500, { message: 'Description should be 500 characters at most' }),
   Tags: z
-    .array(z.string())
+    .array(
+      z
+        .string()
+        .max(50, { message: 'Tags should have 50 characters, at most' }),
+    )
     .min(1, { message: 'You must select at least one tag' })
     .max(4, { message: 'You can select 4 tags, at most' }),
 });
@@ -53,7 +61,7 @@ export async function createTransaction(prevState: State, formData: FormData) {
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create transaction.',
+      message: 'Missing Fields. Failed to create transaction.',
     };
   }
 

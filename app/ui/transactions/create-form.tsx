@@ -25,7 +25,7 @@ export default function CreateForm({ tags }: { tags: Tag[] }) {
     handleCreateTransaction,
     initialState,
   );
-
+  console.log(formState);
   async function handleCreateTransaction(
     previousState: State,
     formData: FormData,
@@ -92,6 +92,8 @@ export default function CreateForm({ tags }: { tags: Tag[] }) {
                 shrink: true,
               }}
               sx={{ width: '100%' }}
+              error={formState.errors?.Description !== undefined}
+              helperText={formState.errors?.Description}
             />
           </div>
           <div className={styles.fieldContainer}>

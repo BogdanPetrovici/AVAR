@@ -99,6 +99,8 @@ export default function EditForm({
                 shrink: true,
               }}
               sx={{ width: '100%' }}
+              error={formState.errors?.Description !== undefined}
+              helperText={formState.errors?.Description}
             />
           </div>
           <div className={styles.fieldContainer}>
