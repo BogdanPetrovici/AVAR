@@ -12,7 +12,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import Link from 'next/link';
 
 import { Tag } from '@/app/lib/model/tag';
-import { createTransaction, State } from '@/app/lib/actions';
+import { createTransactionAction, State } from '@/app/lib/actions';
 import { useState } from 'react';
 import { useFormState } from 'react-dom';
 
@@ -37,7 +37,7 @@ export default function CreateForm({ tags }: { tags: Tag[] }) {
       }
     });
 
-    return await createTransaction(previousState, formData);
+    return await createTransactionAction(previousState, formData);
   }
 
   return (

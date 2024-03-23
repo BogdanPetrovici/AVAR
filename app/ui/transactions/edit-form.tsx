@@ -41,6 +41,13 @@ export default function EditForm({
       }
     });
 
+    const updatedTransactionDate = formData.get('transaction-date');
+    if (updatedTransactionDate !== transaction.Date) {
+      formData.append('transaction-date-changed', 'true');
+    } else {
+      formData.append('transaction-date-changed', 'false');
+    }
+
     return await updateTransaction(transaction.SK, prevState, formData);
   }
 

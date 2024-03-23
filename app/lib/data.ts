@@ -18,7 +18,7 @@ export async function fetchLatestTransactions(
 
   try {
     const sortKeyLowerBound = `Transaction#${fromDate.format('YYYY-MM-DD')}`;
-    const sortKeyUpperBound = `Transaction#${toDate.format('YYYY-MM-DD')}`;
+    const sortKeyUpperBound = `Transaction#${toDate.add(1, 'day').format('YYYY-MM-DD')}`;
     const client = new DynamoDBClient({
       endpoint: 'http://localhost:8000',
       region: 'eu-central-1',
