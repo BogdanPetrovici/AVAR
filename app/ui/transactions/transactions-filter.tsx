@@ -2,7 +2,7 @@
 
 import styles from '@/app/ui/css/transactions.module.css';
 
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 
@@ -42,7 +42,7 @@ export default function TransactionsFilter({
               key="fromDate"
               format="YYYY-MM-DD"
               value={fromDate}
-              onChange={(newDate: Date | null) => (fromDate = dayjs(newDate))}
+              onChange={(newDate: Dayjs | null) => (fromDate = dayjs(newDate))}
               slotProps={{
                 textField: {
                   inputProps: {
@@ -65,7 +65,7 @@ export default function TransactionsFilter({
               key="toDate"
               format="YYYY-MM-DD"
               value={toDate}
-              onChange={(newDate: Date | null) => (toDate = dayjs(newDate))}
+              onChange={(newDate: Dayjs | null) => (toDate = dayjs(newDate))}
               slotProps={{
                 textField: {
                   inputProps: {
