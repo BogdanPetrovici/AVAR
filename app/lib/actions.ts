@@ -24,6 +24,10 @@ export type State = {
   message?: string | null;
 };
 
+const _dateValueFormat: string = 'YYYY-MM-DD';
+const _dateKeyFormat: string = 'YYYYMMDD';
+const _tableName: string = process.env.DYNAMO_DB_TABLE ?? '';
+
 const FormSchema = z.object({
   PK: z.string(),
   SK: z.string(),
@@ -33,8 +37,10 @@ const FormSchema = z.object({
   }),
   Amount: z.coerce
     .number({ required_error: 'Please select an amount.' })
-    .gt(0, { message: 'Please enter an amount greater than 0.' })
-    .lt(100000, { message: 'Amount must be lower than 100000' }),
+    .max(100000, { message: 'Please enter an amount lower than 100000.' })
+    .min(-100000, {
+      message: 'Please enter an amount greater than -100000.',
+    }),
   Description: z
     .string()
     .max(500, { message: 'Description should be 500 characters at most' }),
@@ -119,12 +125,12 @@ export async function updateTransaction(
     const docClient = DynamoDBDocumentClient.from(client);
 
     const { Date, Amount, Description, Tags } = validatedFields.data;
-    const formattedDate = dayjs(Date).format('YYYY-MM-DD');
+    const formattedDate = dayjs(Date).format(_dateValueFormat);
     const dateChanged = formData.get('transaction-date-changed');
     // if the date hasn't changed, update the relevant fields
     if (dateChanged === 'false') {
       const command = new UpdateCommand({
-        TableName: 'Transactions',
+        TableName: _tableName,
         Key: { PK: 'User#Account1', SK: id },
         UpdateExpression:
           'set #date=:date, #amount=:amount, #description=:description, #tags=:tags',
@@ -188,10 +194,11 @@ async function createTransaction(
     Tags: string[];
   },
 ) {
-  const formattedDate = dayjs(Date).format('YYYY-MM-DD');
-  const transactionSortKey = `Transaction#${formattedDate}#${Guid.create().toString()}`;
+  const formattedDate = dayjs(Date).format(_dateValueFormat);
+  const formattedDateKey = dayjs(Date).format(_dateKeyFormat);
+  const transactionSortKey = `Transaction#${formattedDateKey}#${Guid.create().toString()}`;
   const createTransactionCommand = new PutCommand({
-    TableName: 'Transactions',
+    TableName: _tableName,
     Item: {
       PK: 'User#Account1',
       SK: transactionSortKey,
@@ -212,7 +219,7 @@ async function deleteTransaction(
 ) {
   try {
     const command = new DeleteCommand({
-      TableName: 'Transactions',
+      TableName: _tableName,
       Key: { PK: 'User#Account1', SK: id },
     });
 
@@ -244,7 +251,7 @@ async function createTags(
 
   const createTagsCommand = new BatchWriteCommand({
     RequestItems: {
-      ['Transactions']: tagPutRequests,
+      [_tableName]: tagPutRequests,
     },
   });
   const tagsCreationResponse = await docClient.send(createTagsCommand);

@@ -57,7 +57,7 @@ export default async function TransactionsTable({
             const rangeKeyTokens: string[] = transaction.SK.split('#');
             const transactionId: string =
               rangeKeyTokens.length == 3
-                ? `${rangeKeyTokens[1]}_${rangeKeyTokens[2]}`
+                ? `${rangeKeyTokens[1]}-${rangeKeyTokens[2]}`
                 : '-';
             return (
               <StyledTableRow
