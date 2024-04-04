@@ -27,7 +27,7 @@ export default function DeleteForm({
   return (
     <>
       <Button
-        data-testid="delete-submit"
+        data-test="delete-submit"
         variant="contained"
         type="button"
         color="error"
@@ -50,7 +50,7 @@ export default function DeleteForm({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <form action={deleteTransactionWithId}>
+          <form action={deleteTransactionWithId} data-test="delete-form">
             <Button color="primary" variant="contained" type="submit">
               Yes
             </Button>
@@ -59,6 +59,7 @@ export default function DeleteForm({
             onClick={() => {
               setShowDialog(false);
             }}
+            data-test="cancel-delete"
           >
             Cancel
           </Button>

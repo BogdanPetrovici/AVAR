@@ -151,8 +151,12 @@ export async function updateTransaction(
       const response = await docClient.send(command);
     } else {
       // if the date changed, delete the item and recreate it accordingly - the date is part of the range key
-      await deleteTransaction(docClient, id);
-      await createTransaction(docClient, validatedFields.data);
+      //get the old guid from the edited transaction
+      let idTokens = id.split('#');
+      if (idTokens.length > 2) {
+        await deleteTransaction(docClient, id);
+        await createTransaction(docClient, validatedFields.data, idTokens[2]);
+      }
     }
 
     const newTags = formData.getAll('new-transaction-tags');
@@ -193,10 +197,12 @@ async function createTransaction(
     Description: String;
     Tags: string[];
   },
+  guid?: string,
 ) {
   const formattedDate = dayjs(Date).format(_dateValueFormat);
   const formattedDateKey = dayjs(Date).format(_dateKeyFormat);
-  const transactionSortKey = `Transaction#${formattedDateKey}#${Guid.create().toString()}`;
+  let newGuid = guid ?? Guid.create().toString();
+  const transactionSortKey = `Transaction#${formattedDateKey}#${newGuid}`;
   const createTransactionCommand = new PutCommand({
     TableName: _tableName,
     Item: {

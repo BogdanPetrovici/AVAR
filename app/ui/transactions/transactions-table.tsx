@@ -37,7 +37,7 @@ export default async function TransactionsTable({
       component={Paper}
       elevation={0}
     >
-      <Table aria-label="transactions table" data-testid="transactionsTable">
+      <Table aria-label="transactions table" data-test="transactionsTable">
         <TableHead>
           <StyledTableRow>
             <StyledTableCell align="left" variant="head">

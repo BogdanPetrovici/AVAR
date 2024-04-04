@@ -46,7 +46,7 @@ export default function TransactionsFilter({
               slotProps={{
                 textField: {
                   inputProps: {
-                    'data-testid': 'fromDate',
+                    'data-test': 'fromDate',
                     sx: {
                       borderColor: 'rgb(229 231 235 /1)',
                       fontSize: '0.875rem',
@@ -69,7 +69,7 @@ export default function TransactionsFilter({
               slotProps={{
                 textField: {
                   inputProps: {
-                    'data-testid': 'toDate',
+                    'data-test': 'toDate',
                     sx: {
                       borderColor: 'rgb(229 231 235 /1)',
                       fontSize: '0.875rem',
@@ -84,7 +84,7 @@ export default function TransactionsFilter({
           </div>
         </div>
         <Button
-          data-testid="filterButton"
+          data-test="filterButton"
           variant="outlined"
           onClick={handleFiltered}
         >

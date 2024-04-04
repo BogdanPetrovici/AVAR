@@ -53,7 +53,7 @@ export default function CreateForm({ tags }: { tags: Tag[] }) {
               slotProps={{
                 textField: {
                   inputProps: {
-                    'data-testid': 'transaction-date',
+                    'data-test': 'transaction-date',
                   },
                   InputLabelProps: {
                     shrink: true,
@@ -75,6 +75,7 @@ export default function CreateForm({ tags }: { tags: Tag[] }) {
               InputLabelProps={{
                 shrink: true,
               }}
+              inputProps={{ 'data-test': 'transaction-amount' }}
               sx={{ width: '100%' }}
               error={formState.errors?.Amount !== undefined}
               helperText={formState.errors?.Amount}
@@ -91,6 +92,7 @@ export default function CreateForm({ tags }: { tags: Tag[] }) {
               InputLabelProps={{
                 shrink: true,
               }}
+              inputProps={{ 'data-test': 'transaction-description' }}
               sx={{ width: '100%' }}
               error={formState.errors?.Description !== undefined}
               helperText={formState.errors?.Description}
@@ -131,6 +133,10 @@ export default function CreateForm({ tags }: { tags: Tag[] }) {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  inputProps={{
+                    ...params.inputProps,
+                    'data-test': 'transaction-tags',
+                  }}
                   error={formState.errors?.Tags !== undefined}
                   helperText={formState.errors?.Tags}
                 />
@@ -140,11 +146,11 @@ export default function CreateForm({ tags }: { tags: Tag[] }) {
         </div>
         <div className={styles.buttonContainer}>
           <Link href="/transactions">
-            <Button data-testid="edit-cancel" variant="outlined">
+            <Button data-test="edit-cancel" variant="outlined">
               Cancel
             </Button>
           </Link>
-          <Button data-testid="edit-submit" variant="contained" type="submit">
+          <Button data-test="edit-submit" variant="contained" type="submit">
             Create transaction
           </Button>
         </div>
