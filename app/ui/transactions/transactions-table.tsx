@@ -37,7 +37,7 @@ export default async function TransactionsTable({
       component={Paper}
       elevation={0}
     >
-      <Table aria-label="transactions table" data-testid="transactionsTable">
+      <Table aria-label="transactions table" data-test="transactionsTable">
         <TableHead>
           <StyledTableRow>
             <StyledTableCell align="left" variant="head">
@@ -57,7 +57,7 @@ export default async function TransactionsTable({
             const rangeKeyTokens: string[] = transaction.SK.split('#');
             const transactionId: string =
               rangeKeyTokens.length == 3
-                ? `${rangeKeyTokens[1]}_${rangeKeyTokens[2]}`
+                ? `${rangeKeyTokens[1]}-${rangeKeyTokens[2]}`
                 : '-';
             return (
               <StyledTableRow

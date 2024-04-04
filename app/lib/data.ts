@@ -8,7 +8,9 @@ import { Dayjs } from 'dayjs';
 import { unstable_noStore as noStore } from 'next/cache';
 
 import { Transaction } from './model/transaction';
-import { error } from 'console';
+
+const _tableName: string = process.env.DYNAMO_DB_TABLE ?? '';
+const _dateKeyFormat: string = 'YYYYMMDD';
 
 export async function fetchLatestTransactions(
   fromDate: Dayjs,
@@ -17,8 +19,8 @@ export async function fetchLatestTransactions(
   noStore();
 
   try {
-    const sortKeyLowerBound = `Transaction#${fromDate.format('YYYY-MM-DD')}`;
-    const sortKeyUpperBound = `Transaction#${toDate.format('YYYY-MM-DD')}`;
+    const sortKeyLowerBound = `Transaction#${fromDate.format(_dateKeyFormat)}`;
+    const sortKeyUpperBound = `Transaction#${toDate.add(1, 'day').format(_dateKeyFormat)}`;
     const client = new DynamoDBClient({
       endpoint: 'http://localhost:8000',
       region: 'eu-central-1',
@@ -26,7 +28,7 @@ export async function fetchLatestTransactions(
     });
     const docClient = DynamoDBDocumentClient.from(client);
     const command = new QueryCommand({
-      TableName: 'Transactions',
+      TableName: _tableName,
       KeyConditionExpression: 'PK = :pk AND SK BETWEEN :skBottom AND :skTop',
       ExpressionAttributeValues: {
         ':pk': 'User#Account1',
@@ -69,10 +71,10 @@ export async function getTransactionById(id: string): Promise<Transaction> {
     });
     const docClient = DynamoDBDocumentClient.from(client);
     const command = new GetCommand({
-      TableName: 'Transactions',
+      TableName: _tableName,
       Key: {
         PK: 'User#Account1',
-        SK: `Transaction#${id.replace('_', '#')}`,
+        SK: `Transaction#${id.replace('-', '#')}`,
       },
     });
 
@@ -107,7 +109,7 @@ export async function getTags() {
 
     const docClient = DynamoDBDocumentClient.from(client);
     const command = new QueryCommand({
-      TableName: 'Transactions',
+      TableName: _tableName,
       KeyConditionExpression: 'PK = :pk',
       ExpressionAttributeValues: {
         ':pk': 'User#Account1',

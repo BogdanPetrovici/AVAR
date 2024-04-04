@@ -25,7 +25,7 @@ export default function Transactions({
           <Skeleton
             variant="rounded"
             height={600}
-            data-testid="transactionsTablePlaceholder"
+            data-test="transactionsTablePlaceholder"
           />
         }
       >

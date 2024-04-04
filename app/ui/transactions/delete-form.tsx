@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteTransaction } from '@/app/lib/actions';
+import { deleteTransactionAction } from '@/app/lib/actions';
 import { Transaction } from '@/app/lib/model/transaction';
 
 import {
@@ -19,12 +19,15 @@ export default function DeleteForm({
   transaction: Transaction;
 }) {
   const [showDialog, setShowDialog] = useState(false);
-  let deleteTransactionWithId = deleteTransaction.bind(null, transaction.SK);
+  let deleteTransactionWithId = deleteTransactionAction.bind(
+    null,
+    transaction.SK,
+  );
 
   return (
     <>
       <Button
-        data-testid="delete-submit"
+        data-test="delete-submit"
         variant="contained"
         type="button"
         color="error"
@@ -47,7 +50,7 @@ export default function DeleteForm({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <form action={deleteTransactionWithId}>
+          <form action={deleteTransactionWithId} data-test="delete-form">
             <Button color="primary" variant="contained" type="submit">
               Yes
             </Button>
@@ -56,6 +59,7 @@ export default function DeleteForm({
             onClick={() => {
               setShowDialog(false);
             }}
+            data-test="cancel-delete"
           >
             Cancel
           </Button>

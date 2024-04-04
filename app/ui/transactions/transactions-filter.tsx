@@ -2,7 +2,7 @@
 
 import styles from '@/app/ui/css/transactions.module.css';
 
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 
@@ -42,11 +42,11 @@ export default function TransactionsFilter({
               key="fromDate"
               format="YYYY-MM-DD"
               value={fromDate}
-              onChange={(newDate: Date | null) => (fromDate = dayjs(newDate))}
+              onChange={(newDate: Dayjs | null) => (fromDate = dayjs(newDate))}
               slotProps={{
                 textField: {
                   inputProps: {
-                    'data-testid': 'fromDate',
+                    'data-test': 'fromDate',
                     sx: {
                       borderColor: 'rgb(229 231 235 /1)',
                       fontSize: '0.875rem',
@@ -65,11 +65,11 @@ export default function TransactionsFilter({
               key="toDate"
               format="YYYY-MM-DD"
               value={toDate}
-              onChange={(newDate: Date | null) => (toDate = dayjs(newDate))}
+              onChange={(newDate: Dayjs | null) => (toDate = dayjs(newDate))}
               slotProps={{
                 textField: {
                   inputProps: {
-                    'data-testid': 'toDate',
+                    'data-test': 'toDate',
                     sx: {
                       borderColor: 'rgb(229 231 235 /1)',
                       fontSize: '0.875rem',
@@ -84,7 +84,7 @@ export default function TransactionsFilter({
           </div>
         </div>
         <Button
-          data-testid="filterButton"
+          data-test="filterButton"
           variant="outlined"
           onClick={handleFiltered}
         >

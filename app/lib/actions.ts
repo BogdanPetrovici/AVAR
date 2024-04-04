@@ -24,6 +24,10 @@ export type State = {
   message?: string | null;
 };
 
+const _dateValueFormat: string = 'YYYY-MM-DD';
+const _dateKeyFormat: string = 'YYYYMMDD';
+const _tableName: string = process.env.DYNAMO_DB_TABLE ?? '';
+
 const FormSchema = z.object({
   PK: z.string(),
   SK: z.string(),
@@ -33,8 +37,10 @@ const FormSchema = z.object({
   }),
   Amount: z.coerce
     .number({ required_error: 'Please select an amount.' })
-    .gt(0, { message: 'Please enter an amount greater than 0.' })
-    .lt(100000, { message: 'Amount must be lower than 100000' }),
+    .max(100000, { message: 'Please enter an amount lower than 100000.' })
+    .min(-100000, {
+      message: 'Please enter an amount greater than -100000.',
+    }),
   Description: z
     .string()
     .max(500, { message: 'Description should be 500 characters at most' }),
@@ -50,7 +56,10 @@ const FormSchema = z.object({
 
 const CreateTransaction = FormSchema.omit({ PK: true, SK: true });
 
-export async function createTransaction(prevState: State, formData: FormData) {
+export async function createTransactionAction(
+  prevState: State,
+  formData: FormData,
+) {
   const validatedFields = CreateTransaction.safeParse({
     Date: formData.get('transaction-date'),
     Amount: formData.get('transaction-amount'),
@@ -72,27 +81,9 @@ export async function createTransaction(prevState: State, formData: FormData) {
       credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
     });
     const docClient = DynamoDBDocumentClient.from(client);
-
-    const { Date, Amount, Description, Tags } = validatedFields.data;
-    const formattedDate = dayjs(Date).format('YYYY-MM-DD');
-    const transactionSortKey = `Transaction#${formattedDate}#${Guid.create().toString()}`;
-    const createTransactionCommand = new PutCommand({
-      TableName: 'Transactions',
-      Item: {
-        PK: 'User#Account1',
-        SK: transactionSortKey,
-        Date: formattedDate,
-        Amount: Amount,
-        Description: Description,
-        Tags: new Set<string>(Tags),
-      },
-    });
-    const transactionCreationResponse = await docClient.send(
-      createTransactionCommand,
-    );
-
+    await createTransaction(docClient, validatedFields.data);
     const newTags = formData.getAll('new-transaction-tags');
-    await createTags(newTags, docClient);
+    await createTags(docClient, newTags);
   } catch (error) {
     console.error('Database Error:', error);
     return {
@@ -134,50 +125,107 @@ export async function updateTransaction(
     const docClient = DynamoDBDocumentClient.from(client);
 
     const { Date, Amount, Description, Tags } = validatedFields.data;
-    const formattedDate = dayjs(Date).format('YYYY-MM-DD');
-    const command = new UpdateCommand({
-      TableName: 'Transactions',
-      Key: { PK: 'User#Account1', SK: id },
-      UpdateExpression:
-        'set #date=:date, #amount=:amount, #description=:description, #tags=:tags',
-      ExpressionAttributeValues: {
-        ':date': formattedDate,
-        ':amount': Amount,
-        ':description': Description,
-        ':tags': new Set(Tags),
-      },
-      ExpressionAttributeNames: {
-        '#date': 'Date',
-        '#amount': 'Amount',
-        '#description': 'Description',
-        '#tags': 'Tags',
-      },
-      ReturnValues: 'ALL_NEW',
-    });
-
-    const response = await docClient.send(command);
+    const formattedDate = dayjs(Date).format(_dateValueFormat);
+    const dateChanged = formData.get('transaction-date-changed');
+    // if the date hasn't changed, update the relevant fields
+    if (dateChanged === 'false') {
+      const command = new UpdateCommand({
+        TableName: _tableName,
+        Key: { PK: 'User#Account1', SK: id },
+        UpdateExpression:
+          'set #date=:date, #amount=:amount, #description=:description, #tags=:tags',
+        ExpressionAttributeValues: {
+          ':date': formattedDate,
+          ':amount': Amount,
+          ':description': Description,
+          ':tags': new Set(Tags),
+        },
+        ExpressionAttributeNames: {
+          '#date': 'Date',
+          '#amount': 'Amount',
+          '#description': 'Description',
+          '#tags': 'Tags',
+        },
+        ReturnValues: 'ALL_NEW',
+      });
+      const response = await docClient.send(command);
+    } else {
+      // if the date changed, delete the item and recreate it accordingly - the date is part of the range key
+      //get the old guid from the edited transaction
+      let idTokens = id.split('#');
+      if (idTokens.length > 2) {
+        await deleteTransaction(docClient, id);
+        await createTransaction(docClient, validatedFields.data, idTokens[2]);
+      }
+    }
 
     const newTags = formData.getAll('new-transaction-tags');
-    await createTags(newTags, docClient);
+    await createTags(docClient, newTags);
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error(`Failed to update transaction ${id}`);
+    return {
+      message: 'Database Error: Failed to create transaction.',
+    };
   }
 
   revalidatePath('/transactions');
   redirect('/transactions');
 }
 
-export async function deleteTransaction(id: string) {
+export async function deleteTransactionAction(id: string) {
+  const client = new DynamoDBClient({
+    endpoint: 'http://localhost:8000',
+    region: 'eu-central-1',
+    credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
+  });
+  const docClient = DynamoDBDocumentClient.from(client);
+  await deleteTransaction(docClient, id);
+  revalidatePath('/transactions');
+  redirect('/transactions');
+}
+
+async function createTransaction(
+  docClient: DynamoDBDocumentClient,
+  {
+    Date,
+    Amount,
+    Description,
+    Tags,
+  }: {
+    Date: Date;
+    Amount: Number;
+    Description: String;
+    Tags: string[];
+  },
+  guid?: string,
+) {
+  const formattedDate = dayjs(Date).format(_dateValueFormat);
+  const formattedDateKey = dayjs(Date).format(_dateKeyFormat);
+  let newGuid = guid ?? Guid.create().toString();
+  const transactionSortKey = `Transaction#${formattedDateKey}#${newGuid}`;
+  const createTransactionCommand = new PutCommand({
+    TableName: _tableName,
+    Item: {
+      PK: 'User#Account1',
+      SK: transactionSortKey,
+      Date: formattedDate,
+      Amount: Amount,
+      Description: Description,
+      Tags: new Set<string>(Tags),
+    },
+  });
+  const transactionCreationResponse = await docClient.send(
+    createTransactionCommand,
+  );
+}
+
+async function deleteTransaction(
+  docClient: DynamoDBDocumentClient,
+  id: string,
+) {
   try {
-    const client = new DynamoDBClient({
-      endpoint: 'http://localhost:8000',
-      region: 'eu-central-1',
-      credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
-    });
-    const docClient = DynamoDBDocumentClient.from(client);
     const command = new DeleteCommand({
-      TableName: 'Transactions',
+      TableName: _tableName,
       Key: { PK: 'User#Account1', SK: id },
     });
 
@@ -186,14 +234,11 @@ export async function deleteTransaction(id: string) {
     console.error('Database Error:', error);
     throw new Error(`Failed to delete transaction ${id}`);
   }
-
-  revalidatePath('/transactions');
-  redirect('/transactions');
 }
 
 async function createTags(
-  newTags: FormDataEntryValue[],
   docClient: DynamoDBDocumentClient,
+  newTags: FormDataEntryValue[],
 ) {
   if (newTags === undefined || newTags === null || newTags.length == 0) {
     return null;
@@ -212,7 +257,7 @@ async function createTags(
 
   const createTagsCommand = new BatchWriteCommand({
     RequestItems: {
-      ['Transactions']: tagPutRequests,
+      [_tableName]: tagPutRequests,
     },
   });
   const tagsCreationResponse = await docClient.send(createTagsCommand);

@@ -36,7 +36,11 @@ export default async function Page({
           Transactions
         </h1>
         <Link href="/transactions/create">
-          <Button data-testid="create-transaction-button" variant="contained" type="button">
+          <Button
+            data-test="create-transaction-button"
+            variant="contained"
+            type="button"
+          >
             Create transaction
           </Button>
         </Link>

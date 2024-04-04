@@ -1,6 +1,6 @@
 import styles from '@/app/ui/css/page.module.css';
 
-import { getTags, getTransactionById } from '@/app/lib/data';
+import { getTags } from '@/app/lib/data';
 import { lusitana } from '@/app/ui/fonts';
 import CreateForm from '@/app/ui/transactions/create-form';
 
