@@ -12,6 +12,7 @@ import {
   DialogContentText,
 } from '@mui/material';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function DeleteForm({
   transaction,
@@ -50,7 +51,19 @@ export default function DeleteForm({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <form action={deleteTransactionWithId} data-test="delete-form">
+          <form
+            action={async (formData: FormData) => {
+              const deleteResult = await deleteTransactionAction(
+                transaction.SK,
+                formData,
+              );
+
+              if (deleteResult?.message) {
+                toast.error(deleteResult.message);
+              }
+            }}
+            data-test="delete-form"
+          >
             <Button color="primary" variant="contained" type="submit">
               Yes
             </Button>

@@ -16,6 +16,7 @@ import { Tag } from '@/app/lib/model/tag';
 import { updateTransaction, State } from '@/app/lib/actions';
 import { useState } from 'react';
 import { useFormState } from 'react-dom';
+import { toast } from 'react-hot-toast';
 
 export default function EditForm({
   transaction,
@@ -49,6 +50,10 @@ export default function EditForm({
     }
 
     return await updateTransaction(transaction.SK, prevState, formData);
+  }
+
+  if (formState?.message) {
+    toast.error(formState.message);
   }
 
   return (
