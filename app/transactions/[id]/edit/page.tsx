@@ -4,12 +4,17 @@ import { getTags, getTransactionById } from '@/app/lib/data';
 import { lusitana } from '@/app/ui/fonts';
 import DeleteForm from '@/app/ui/transactions/delete-form';
 import EditForm from '@/app/ui/transactions/edit-form';
+import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const [transaction, tags] = await Promise.all([
     getTransactionById(params.id),
     getTags(),
   ]);
+
+  if (!transaction) {
+    notFound();
+  }
 
   return (
     <main className={styles.pageContainer}>

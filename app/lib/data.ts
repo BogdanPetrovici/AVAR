@@ -60,7 +60,9 @@ export async function fetchLatestTransactions(
   }
 }
 
-export async function getTransactionById(id: string): Promise<Transaction> {
+export async function getTransactionById(
+  id: string,
+): Promise<Transaction | undefined> {
   noStore();
 
   try {
@@ -79,18 +81,16 @@ export async function getTransactionById(id: string): Promise<Transaction> {
     });
 
     const response = await docClient.send(command);
-    if (response.Item == null) {
-      throw new Error(`Could not find transaction with id ${id}`);
+    if (response.Item != null) {
+      return {
+        PK: response.Item.PK,
+        SK: response.Item.SK,
+        Date: response.Item.Date,
+        Amount: response.Item.Amount,
+        Tags: Array.from(response.Item.Tags),
+        Description: response.Item.Description,
+      };
     }
-
-    return {
-      PK: response.Item.PK,
-      SK: response.Item.SK,
-      Date: response.Item.Date,
-      Amount: response.Item.Amount,
-      Tags: Array.from(response.Item.Tags),
-      Description: response.Item.Description,
-    };
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error(`Failed to fetch transaction ${id}`);

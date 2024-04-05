@@ -15,6 +15,7 @@ import { Tag } from '@/app/lib/model/tag';
 import { createTransactionAction, State } from '@/app/lib/actions';
 import { useState } from 'react';
 import { useFormState } from 'react-dom';
+import { toast } from 'react-hot-toast';
 
 export default function CreateForm({ tags }: { tags: Tag[] }) {
   const filteredTags = tags.filter((tag) => Boolean(tag.Name));
@@ -38,6 +39,10 @@ export default function CreateForm({ tags }: { tags: Tag[] }) {
     });
 
     return await createTransactionAction(previousState, formData);
+  }
+
+  if (formState?.message) {
+    toast.error(formState.message);
   }
 
   return (

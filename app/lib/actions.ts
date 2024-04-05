@@ -172,14 +172,22 @@ export async function updateTransaction(
   redirect('/transactions');
 }
 
-export async function deleteTransactionAction(id: string) {
-  const client = new DynamoDBClient({
-    endpoint: 'http://localhost:8000',
-    region: 'eu-central-1',
-    credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
-  });
-  const docClient = DynamoDBDocumentClient.from(client);
-  await deleteTransaction(docClient, id);
+export async function deleteTransactionAction(id: string, formData: FormData) {
+  try {
+    const client = new DynamoDBClient({
+      endpoint: 'http://localhost:8000',
+      region: 'eu-central-1',
+      credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
+    });
+    const docClient = DynamoDBDocumentClient.from(client);
+    await deleteTransaction(docClient, id);
+  } catch (error) {
+    console.error('Database Error:', error);
+    return {
+      message: 'Database Error: Failed to delete transaction.',
+    };
+  }
+
   revalidatePath('/transactions');
   redirect('/transactions');
 }
