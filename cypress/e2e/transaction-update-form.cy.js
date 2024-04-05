@@ -168,7 +168,7 @@ describe('Transaction Creation Form', () => {
       .should('not.exist');
   });
 
-  it.only('cancelling delete does not remove transaction', () => {
+  it('cancelling delete does not remove transaction', () => {
     //create transaction
     cy.visit('/transactions/create');
     cy.getByData('transaction-amount').type('12.34');
@@ -199,5 +199,17 @@ describe('Transaction Creation Form', () => {
       .find('.MuiChip-label')
       .contains(testTag)
       .should('exist');
+  });
+
+  it('if transaction not found display 404 error page', () => {
+    cy.visit(
+      '/transactions/00000000-00000000-0000-0000-0000-000000000000/edit',
+      { failOnStatusCode: false },
+    );
+    cy.getByData('redirect-button').should('exist');
+    cy.getByData('not-found-title').should('exist').contains('404 Not Found');
+    cy.getByData('not-found-text')
+      .should('exist')
+      .contains('Could not find the requested transaction.');
   });
 });

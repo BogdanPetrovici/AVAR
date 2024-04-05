@@ -6,8 +6,12 @@ export default function NotFound() {
   return (
     <main className={styles.errPage}>
       <FaceFrownIcon className={styles.errIcon} />
-      <h2 className={styles.errHeading}>404 Not Found</h2>
-      <p>Could not find the requested transaction.</p>
+      <h2 data-test="not-found-title" className={styles.errHeading}>
+        404 Not Found
+      </h2>
+      <p data-test="not-found-text">
+        Could not find the requested transaction.
+      </p>
       <Button
         data-test="redirect-button"
         variant="contained"
