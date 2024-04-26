@@ -31,10 +31,9 @@ const _tableName: string = process.env.DYNAMO_DB_TABLE ?? '';
 const FormSchema = z.object({
   PK: z.string(),
   SK: z.string(),
-  Date: z.coerce.date({
-    required_error: 'Please select a Date.',
-    invalid_type_error: 'The selected date is invalid.',
-  }),
+  Date: z
+    .string({ required_error: 'Please select a Date.' })
+    .date('The selected date is invalid.'),
   Amount: z.coerce
     .number({ required_error: 'Please select an amount.' })
     .max(100000, { message: 'Please enter an amount lower than 100000.' })
@@ -60,13 +59,14 @@ export async function createTransactionAction(
   prevState: State,
   formData: FormData,
 ) {
+  console.log(formData);
   const validatedFields = CreateTransaction.safeParse({
     Date: formData.get('transaction-date'),
     Amount: formData.get('transaction-amount'),
     Description: formData.get('transaction-description'),
     Tags: formData.getAll('transaction-tags'),
   });
-
+  console.log(validatedFields);
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -200,7 +200,7 @@ async function createTransaction(
     Description,
     Tags,
   }: {
-    Date: Date;
+    Date: string;
     Amount: Number;
     Description: String;
     Tags: string[];
