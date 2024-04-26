@@ -212,4 +212,90 @@ describe('Transaction Creation Form', () => {
       .should('exist')
       .contains('Could not find the requested transaction.');
   });
+
+  it('cannot remove year from transaction date', () => {
+    cy.visit('/transactions/create');
+    cy.getByData('transaction-amount').type('12.34');
+    cy.getByData('transaction-description').type('test description');
+    let testTag = Guid.create().toString();
+    let today = dayjs();
+    cy.getByData('transaction-date').type(today.format('YYYY-MM-DD'));
+    cy.getByData('transaction-tags').type(`${testTag}{enter}`);
+    cy.getByData('edit-submit').click();
+    cy.getByData('fromDate').type(today.format('YYYY-MM-DD'));
+    cy.getByData('toDate').type(today.format('YYYY-MM-DD'));
+    cy.getByData('transactionsTable')
+      .find('tbody tr')
+      .find('.MuiChip-label')
+      .contains(testTag)
+      .parent()
+      .parent()
+      .parent()
+      .find('a')
+      .click();
+    cy.getByData('transaction-date').click().type('{del}');
+    cy.getByData('edit-submit').click();
+    cy.getByData('transaction-date')
+      .errorMessage()
+      .should('exist')
+      .contains('The selected date is invalid.');
+  });
+
+  it('cannot remove month from transaction date', () => {
+    cy.visit('/transactions/create');
+    cy.getByData('transaction-amount').type('12.34');
+    cy.getByData('transaction-description').type('test description');
+    let testTag = Guid.create().toString();
+    let today = dayjs();
+    cy.getByData('transaction-date').type(today.format('YYYY-MM-DD'));
+    cy.getByData('transaction-tags').type(`${testTag}{enter}`);
+    cy.getByData('edit-submit').click();
+    cy.getByData('fromDate').type(today.format('YYYY-MM-DD'));
+    cy.getByData('toDate').type(today.format('YYYY-MM-DD'));
+    cy.getByData('transactionsTable')
+      .find('tbody tr')
+      .find('.MuiChip-label')
+      .contains(testTag)
+      .parent()
+      .parent()
+      .parent()
+      .find('a')
+      .click();
+    cy.getByData('transaction-date').click().type('{rightArrow}{del}');
+    cy.getByData('edit-submit').click();
+    cy.getByData('transaction-date')
+      .errorMessage()
+      .should('exist')
+      .contains('The selected date is invalid.');
+  });
+
+  it('cannot remove day from transaction date', () => {
+    cy.visit('/transactions/create');
+    cy.getByData('transaction-amount').type('12.34');
+    cy.getByData('transaction-description').type('test description');
+    let testTag = Guid.create().toString();
+    let today = dayjs();
+    cy.getByData('transaction-date').type(today.format('YYYY-MM-DD'));
+    cy.getByData('transaction-tags').type(`${testTag}{enter}`);
+    cy.getByData('edit-submit').click();
+    cy.getByData('fromDate').type(today.format('YYYY-MM-DD'));
+    cy.getByData('toDate').type(today.format('YYYY-MM-DD'));
+    cy.getByData('transactionsTable')
+      .find('tbody tr')
+      .find('.MuiChip-label')
+      .contains(testTag)
+      .parent()
+      .parent()
+      .parent()
+      .find('a')
+      .click();
+    cy.getByData('transaction-date')
+      .click()
+      .type('{rightArrow}{rightArrow}{del}');
+    cy.getByData('edit-submit').click();
+    cy.getByData('transaction-date')
+      .errorMessage()
+      .should('exist')
+      .contains('The selected date is invalid.');
+  });
 });

@@ -144,4 +144,43 @@ describe('Transaction Creation Form', () => {
       .should('exist')
       .contains('Description should be 500 characters at most');
   });
+
+  it('cannot create transaction without year', () => {
+    cy.getByData('transaction-amount').type('12.34');
+    cy.getByData('transaction-description').type('test description');
+    cy.getByData('transaction-date').type('{rightArrow}1111');
+    let testTag = Guid.create().toString();
+    cy.getByData('transaction-tags').type(`${testTag}{enter}`);
+    cy.getByData('edit-submit').click();
+    cy.getByData('transaction-date')
+      .errorMessage()
+      .should('exist')
+      .contains('The selected date is invalid.');
+  });
+
+  it('cannot create transaction without month', () => {
+    cy.getByData('transaction-amount').type('12.34');
+    cy.getByData('transaction-description').type('test description');
+    cy.getByData('transaction-date').type('2024{rightArrow}11');
+    let testTag = Guid.create().toString();
+    cy.getByData('transaction-tags').type(`${testTag}{enter}`);
+    cy.getByData('edit-submit').click();
+    cy.getByData('transaction-date')
+      .errorMessage()
+      .should('exist')
+      .contains('The selected date is invalid.');
+  });
+
+  it('cannot create transaction without day', () => {
+    cy.getByData('transaction-amount').type('12.34');
+    cy.getByData('transaction-description').type('test description');
+    cy.getByData('transaction-date').type('202411');
+    let testTag = Guid.create().toString();
+    cy.getByData('transaction-tags').type(`${testTag}{enter}`);
+    cy.getByData('edit-submit').click();
+    cy.getByData('transaction-date')
+      .errorMessage()
+      .should('exist')
+      .contains('The selected date is invalid.');
+  });
 });
