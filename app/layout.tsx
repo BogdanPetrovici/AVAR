@@ -21,7 +21,7 @@ export default function RootLayout({
             <div className={styles.tabContainer}>{children}</div>
           </div>
         </AppRouterCacheProvider>
-        <Toaster position="bottom-right" />
+        <Toaster position="bottom-center" />
       </body>
     </html>
   );
