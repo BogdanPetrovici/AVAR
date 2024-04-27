@@ -29,7 +29,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('transaction-date')
       .errorMessage()
       .should('exist')
-      .contains('Invalid date');
+      .contains('The selected date is invalid.');
   });
 
   it('tag field is mandatory', () => {

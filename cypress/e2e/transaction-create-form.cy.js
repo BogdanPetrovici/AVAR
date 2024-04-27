@@ -21,7 +21,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('transaction-date')
       .errorMessage()
       .should('exist')
-      .contains('Invalid date');
+      .contains('The selected date is invalid.');
   });
 
   it('tag field is mandatory', () => {
@@ -75,7 +75,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('transaction-tags').errorMessage().should('not.exist');
     cy.getByData('transaction-tags').focus();
     cy.get('[data-testid=CloseIcon]').parent().click();
-    for (i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i++) {
       cy.getByData('transaction-tags').type('0123456789');
     }
     cy.getByData('transaction-tags').type('0{enter}');

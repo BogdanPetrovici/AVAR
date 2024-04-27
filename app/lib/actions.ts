@@ -59,14 +59,12 @@ export async function createTransactionAction(
   prevState: State,
   formData: FormData,
 ) {
-  console.log(formData);
   const validatedFields = CreateTransaction.safeParse({
     Date: formData.get('transaction-date'),
     Amount: formData.get('transaction-amount'),
     Description: formData.get('transaction-description'),
     Tags: formData.getAll('transaction-tags'),
   });
-  console.log(validatedFields);
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
