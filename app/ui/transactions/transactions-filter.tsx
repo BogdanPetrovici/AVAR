@@ -4,12 +4,16 @@ import styles from '@/app/ui/css/transactions.module.css';
 
 import dayjs, { Dayjs } from 'dayjs';
 
+import { useState } from 'react';
+
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Button } from '@mui/material';
+import { Button, FormHelperText } from '@mui/material';
+
+import { toast } from 'react-hot-toast';
 
 export default function TransactionsFilter({
   initialFromDate,
@@ -18,18 +22,25 @@ export default function TransactionsFilter({
   initialFromDate: Date;
   initialToDate: Date;
 }) {
+  let fromDate = dayjs(initialFromDate);
+  let toDate = dayjs(initialToDate);
+
+  const [filterError, setFilterError] = useState(fromDate > toDate);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  let fromDate = dayjs(initialFromDate);
-  let toDate = dayjs(initialToDate);
-
   function handleFiltered() {
-    const params = new URLSearchParams(searchParams);
-    params.set('from', fromDate.format('YYYY-MM-DD'));
-    params.set('to', toDate.format('YYYY-MM-DD'));
-    replace(`${pathname}?${params.toString()}`);
+    if (fromDate > toDate) {
+      toast.error('End date should be more recent than start date');
+      setFilterError(true);
+    } else {
+      setFilterError(false);
+      const params = new URLSearchParams(searchParams);
+      params.set('from', fromDate.format('YYYY-MM-DD'));
+      params.set('to', toDate.format('YYYY-MM-DD'));
+      replace(`${pathname}?${params.toString()}`);
+    }
   }
 
   return (
@@ -55,6 +66,7 @@ export default function TransactionsFilter({
                       outlineWidth: '2px',
                     },
                   },
+                  error: filterError,
                 },
               }}
             />
@@ -78,6 +90,7 @@ export default function TransactionsFilter({
                       outlineWidth: '2px',
                     },
                   },
+                  error: filterError,
                 },
               }}
             />
@@ -91,6 +104,11 @@ export default function TransactionsFilter({
           Filter
         </Button>
       </div>
+      {filterError && (
+        <FormHelperText error data-test="filter-error">
+          End date should be more recent than start date
+        </FormHelperText>
+      )}
     </LocalizationProvider>
   );
 }

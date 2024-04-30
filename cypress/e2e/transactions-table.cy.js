@@ -43,4 +43,21 @@ describe('Transactions Table', () => {
     cy.getByData('filterButton').click();
     cy.getByData('transactionsTable').get('tbody tr').should('have.length', 4);
   });
+
+  it.only('filtering with start date greater than end date shows validation error', () => {
+    cy.getByData('fromDate').type('2023-12-17');
+    cy.getByData('toDate').type('2023-12-16');
+    cy.getByData('filterButton').click();
+    cy.getByData('filter-error')
+      .should('exist')
+      .contains('End date should be more recent than start date');
+  });
+
+  it.only('querying with start date greater than end date returns empty resultset and shows validation error', () => {
+    cy.visit('/transactions?from=2024-04-29&to=2024-04-28');
+    cy.getByData('filter-error')
+      .should('exist')
+      .contains('End date should be more recent than start date');
+    cy.getByData('transactionsTable').get('tbody tr').should('have.length', 0);
+  });
 });
