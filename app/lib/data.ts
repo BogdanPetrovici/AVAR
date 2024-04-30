@@ -17,6 +17,9 @@ export async function fetchLatestTransactions(
   toDate: Dayjs,
 ): Promise<Transaction[]> {
   noStore();
+  if (fromDate > toDate) {
+    return [];
+  }
 
   try {
     const sortKeyLowerBound = `Transaction#${fromDate.format(_dateKeyFormat)}`;
