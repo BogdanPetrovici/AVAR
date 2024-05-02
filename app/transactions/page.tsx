@@ -28,7 +28,6 @@ export default async function Page({
     toDate = dayjs(searchParams?.to, 'YYYY-MM-DD');
   }
 
-  const currentPage = Number(searchParams?.page) || 1;
   return (
     <main className={styles.pageContainer}>
       <header className={styles.pageHeading}>
@@ -45,7 +44,7 @@ export default async function Page({
           </Button>
         </Link>
       </header>
-      <Transactions from={fromDate} to={toDate} currentPage={currentPage} />
+      <Transactions from={fromDate} to={toDate} page={searchParams?.page} />
     </main>
   );
 }

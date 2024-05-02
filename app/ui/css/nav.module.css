@@ -20,7 +20,7 @@
 }
 
 .logoContainer {
-  width: 8rem;
+  width: 10rem;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -29,8 +29,8 @@
 }
 
 .logoIcon {
-  height: 3rem;
-  width: 3rem;
+  height: 48px;
+  width: 48px;
   transform: translate(0, 0) rotate(15deg) skewX(0) skewY(0) scaleX(1) scaleY(1);
 }
 
@@ -104,10 +104,6 @@
 
   .logoLink {
     height: 10rem;
-  }
-
-  .logoContainer {
-    width: 10rem;
   }
 
   .menuItemContainer {

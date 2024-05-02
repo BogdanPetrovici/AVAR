@@ -40,6 +40,13 @@
   width: 1.25rem;
 }
 
+.paginationContainer {
+  margin-top: 1.25rem;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
 @media only screen and (min-width: 768px) {
   .filterContainer {
     margin-top: 2rem;

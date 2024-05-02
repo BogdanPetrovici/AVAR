@@ -7,25 +7,22 @@ import TableContainer from '@mui/material/TableContainer';
 import { StyledTableCell } from '@/app/ui/components/styled-table-cell';
 import { StyledTableRow } from '@/app/ui/components/styled-table-row';
 import Paper from '@mui/material/Paper';
-
-import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
-import { fetchLatestTransactions } from '@/app/lib/data';
+import { Chip } from '@mui/material';
 
 import { UpdateTransaction } from '@/app/ui/components/buttons';
 
-import { Dayjs } from 'dayjs';
-import { Chip } from '@mui/material';
+import {
+  formatDateToLocal,
+  formatCurrency,
+  getTransactionId,
+} from '@/app/lib/utils';
+import { Transaction } from '@/app/lib/model/transaction';
 
 export default async function TransactionsTable({
-  fromDate,
-  toDate,
-  currentPage,
+  transactions,
 }: {
-  fromDate: Dayjs;
-  toDate: Dayjs;
-  currentPage: number;
+  transactions: Transaction[];
 }) {
-  let transactions = await fetchLatestTransactions(fromDate, toDate);
   return (
     <TableContainer
       sx={{
@@ -54,11 +51,7 @@ export default async function TransactionsTable({
         </TableHead>
         <TableBody>
           {transactions.map((transaction, index) => {
-            const rangeKeyTokens: string[] = transaction.SK.split('#');
-            const transactionId: string =
-              rangeKeyTokens.length == 3
-                ? `${rangeKeyTokens[1]}-${rangeKeyTokens[2]}`
-                : '-';
+            const transactionId = getTransactionId(transaction.SK);
             return (
               <StyledTableRow
                 key={index}
