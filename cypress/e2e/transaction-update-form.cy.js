@@ -4,7 +4,7 @@ import { Guid } from 'guid-typescript';
 describe('Transaction Creation Form', () => {
   beforeEach(() => {
     cy.visit(
-      '/transactions/20240325-46352667-2322-d648-61ab-596960d677b5/edit',
+      '/transactions/20240325-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
     );
   });
 
@@ -105,7 +105,7 @@ describe('Transaction Creation Form', () => {
       .type('2024-03-26');
     cy.getByData('edit-submit').click();
     cy.visit(
-      '/transactions/20240326-46352667-2322-d648-61ab-596960d677b5/edit',
+      '/transactions/20240326-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
     );
     //transaction date field should exist if no errors - reset to previous value for future tests
     cy.getByData('transaction-date')
@@ -125,7 +125,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('edit-submit').click();
 
     cy.visit(
-      '/transactions/20240325-46352667-2322-d648-61ab-596960d677b5/edit',
+      '/transactions/20240325-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
     );
 
     // put everything back

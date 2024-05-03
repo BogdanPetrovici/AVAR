@@ -9,16 +9,19 @@ import { unstable_noStore as noStore } from 'next/cache';
 
 import { Transaction } from './model/transaction';
 
+import { getTransactionKey } from './utils';
+
 const _tableName: string = process.env.DYNAMO_DB_TABLE ?? '';
 const _dateKeyFormat: string = 'YYYYMMDD';
 
 export async function fetchLatestTransactions(
   fromDate: Dayjs,
   toDate: Dayjs,
-): Promise<Transaction[]> {
+  lastEvaluatedTransactionId?: string,
+): Promise<{ transactions: Transaction[]; lastKey?: string }> {
   noStore();
   if (fromDate > toDate) {
-    return [];
+    return { transactions: [] };
   }
 
   try {
@@ -40,23 +43,35 @@ export async function fetchLatestTransactions(
       },
       ConsistentRead: false,
       ScanIndexForward: false,
+      Limit: 10,
     });
+
+    if (lastEvaluatedTransactionId !== undefined) {
+      const lastEvaluatedKey = getTransactionKey(lastEvaluatedTransactionId);
+      command.input.ExclusiveStartKey = {
+        PK: 'User#Account1',
+        SK: lastEvaluatedKey,
+      };
+    }
 
     const response = await docClient.send(command);
     if (response.Items == null) {
       throw new Error('Failed to fetch the latest transactions.');
     }
 
-    return response.Items.map((item) => {
-      return {
-        PK: item.PK,
-        SK: item.SK,
-        Date: item.Date,
-        Amount: item.Amount,
-        Tags: Array.from(item.Tags),
-        Description: item.Description,
-      };
-    });
+    return {
+      transactions: response.Items.map((item) => {
+        return {
+          PK: item.PK,
+          SK: item.SK,
+          Date: item.Date,
+          Amount: item.Amount,
+          Tags: Array.from(item.Tags),
+          Description: item.Description,
+        };
+      }),
+      lastKey: response.LastEvaluatedKey?.SK,
+    };
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the latest transactions.');
@@ -79,7 +94,7 @@ export async function getTransactionById(
       TableName: _tableName,
       Key: {
         PK: 'User#Account1',
-        SK: `Transaction#${id.replace('-', '#')}`,
+        SK: getTransactionKey(id),
       },
     });
 

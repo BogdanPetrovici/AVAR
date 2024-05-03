@@ -37,6 +37,7 @@ export default function TransactionsFilter({
     } else {
       setFilterError(false);
       const params = new URLSearchParams(searchParams);
+      params.delete('page');
       params.set('from', fromDate.format('YYYY-MM-DD'));
       params.set('to', toDate.format('YYYY-MM-DD'));
       replace(`${pathname}?${params.toString()}`);

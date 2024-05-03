@@ -44,7 +44,7 @@ describe('Transactions Table', () => {
     cy.getByData('transactionsTable').get('tbody tr').should('have.length', 4);
   });
 
-  it.only('filtering with start date greater than end date shows validation error', () => {
+  it('filtering with start date greater than end date shows validation error', () => {
     cy.getByData('fromDate').type('2023-12-17');
     cy.getByData('toDate').type('2023-12-16');
     cy.getByData('filterButton').click();
@@ -53,11 +53,21 @@ describe('Transactions Table', () => {
       .contains('End date should be more recent than start date');
   });
 
-  it.only('querying with start date greater than end date returns empty resultset and shows validation error', () => {
+  it('querying with start date greater than end date returns empty resultset and shows validation error', () => {
     cy.visit('/transactions?from=2024-04-29&to=2024-04-28');
     cy.getByData('filter-error')
       .should('exist')
       .contains('End date should be more recent than start date');
     cy.getByData('transactionsTable').get('tbody tr').should('have.length', 0);
+  });
+
+  it.only('clicking next button displays next page in transactions table', () => {
+    cy.visit('/transactions?from=2023-12-01&to=2023-12-09');
+    cy.getByData('transactionsTable').get('tbody tr').should('have.length', 10);
+    cy.getByData('next-page-button-disabled').should('not.exist');
+    cy.getByData('next-page-button-active').should('exist').click();
+    cy.getByData('transactionsTable').get('tbody tr').should('have.length', 4);
+    cy.getByData('next-page-button-active').should('not.exist');
+    cy.getByData('next-page-button-disabled').should('exist');
   });
 });

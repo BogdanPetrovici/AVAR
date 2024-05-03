@@ -1,18 +1,30 @@
+import styles from '@/app/ui/css/transactions.module.css';
+
 import { Suspense } from 'react';
 import { Skeleton } from '@mui/material';
+import Pagination from '@/app/ui/components/pagination';
 import TransactionsFilter from '@/app/ui/transactions/transactions-filter';
 import TransactionsTable from '@/app/ui/transactions/transactions-table';
 import { Dayjs } from 'dayjs';
 
-export default function Transactions({
+import { fetchLatestTransactions } from '@/app/lib/data';
+import { getTransactionId } from '@/app/lib/utils';
+
+export default async function Transactions({
   from,
   to,
-  currentPage,
+  page,
 }: {
   from: Dayjs;
   to: Dayjs;
-  currentPage: number;
+  page?: string;
 }) {
+  let transactionData = await fetchLatestTransactions(from, to, page);
+  const nextPage =
+    transactionData.lastKey !== undefined
+      ? getTransactionId(transactionData.lastKey)
+      : undefined;
+
   return (
     <>
       <TransactionsFilter
@@ -29,12 +41,11 @@ export default function Transactions({
           />
         }
       >
-        <TransactionsTable
-          fromDate={from}
-          toDate={to}
-          currentPage={currentPage}
-        />
+        <TransactionsTable transactions={transactionData.transactions} />
       </Suspense>
+      <div className={styles.paginationContainer}>
+        <Pagination nextPage={nextPage} />
+      </div>
     </>
   );
 }
