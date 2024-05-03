@@ -44,9 +44,15 @@ function PaginationArrow({
     );
 
   return isDisabled ? (
-    <div className={className}>{icon}</div>
+    <div data-test="next-page-button-disabled" className={className}>
+      {icon}
+    </div>
   ) : (
-    <Link className={className} href={createPageURL(page)}>
+    <Link
+      data-test="next-page-button-active"
+      className={className}
+      href={createPageURL(page)}
+    >
       {icon}
     </Link>
   );
