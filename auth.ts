@@ -1,36 +1,22 @@
 import NextAuth from 'next-auth';
-import { authConfig } from './auth.config';
-import Credentials from 'next-auth/providers/credentials';
-import { z } from 'zod';
-import type { User } from '@/app/lib/model/user';
-import bcrypt from 'bcrypt';
+import Cognito from 'next-auth/providers/cognito';
 
-async function getUser(email: string): Promise<User | null> {
-  try {
-    return null;
-  } catch (error) {
-    console.error('Failed to fetch user:', error);
-    throw new Error('Failed to fetch user.');
-  }
-}
-
-export const { auth, signIn, signOut } = NextAuth({
-  ...authConfig,
-  providers: [
-    Credentials({
-      async authorize(credentials, request) {
-        const parsedCredentials = z
-          .object({ email: z.string().email(), password: z.string().min(6) })
-          .safeParse(credentials);
-
-        if (parsedCredentials.success) {
-          const { email, password } = parsedCredentials.data;
-          const user = await getUser(email);
-          if (!user) return null;
-        }
-
-        return null;
-      },
-    }),
-  ],
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  pages: {
+    signIn: '/login',
+  },
+  callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
+      if (isOnDashboard) {
+        if (isLoggedIn) return true;
+        return false; // Redirect unauthenticated users to login page
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL('/dashboard', nextUrl));
+      }
+      return true;
+    },
+  },
+  providers: [Cognito],
 });
