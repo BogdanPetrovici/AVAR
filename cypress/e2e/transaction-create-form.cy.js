@@ -3,7 +3,7 @@ import { Guid } from 'guid-typescript';
 
 describe('Transaction Creation Form', () => {
   beforeEach(() => {
-    cy.visit('/transactions/create');
+    cy.visit('/dashboard/transactions/create');
   });
 
   it('form should open with empty fields', () => {

@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 describe('Transactions Table', () => {
   beforeEach(() => {
-    cy.visit('/transactions');
+    cy.visit('/dashboard/transactions');
   });
 
   it('should open with default filtering', () => {
@@ -33,7 +33,7 @@ describe('Transactions Table', () => {
     cy.getByData('transactionsTable').find('tbody tr').eq(0).find('a').click();
     cy.location('pathname').should(
       'to.match',
-      /^\/transactions\/[0-9a-f-]+\/edit/,
+      /^\/dashboard\/transactions\/[0-9a-f-]+\/edit/,
     );
   });
 
@@ -54,7 +54,7 @@ describe('Transactions Table', () => {
   });
 
   it('querying with start date greater than end date returns empty resultset and shows validation error', () => {
-    cy.visit('/transactions?from=2024-04-29&to=2024-04-28');
+    cy.visit('/dashboard/transactions?from=2024-04-29&to=2024-04-28');
     cy.getByData('filter-error')
       .should('exist')
       .contains('End date should be more recent than start date');
@@ -62,7 +62,7 @@ describe('Transactions Table', () => {
   });
 
   it.only('clicking next button displays next page in transactions table', () => {
-    cy.visit('/transactions?from=2023-12-01&to=2023-12-09');
+    cy.visit('/dashboard/transactions?from=2023-12-01&to=2023-12-09');
     cy.getByData('transactionsTable').get('tbody tr').should('have.length', 10);
     cy.getByData('next-page-button-disabled').should('not.exist');
     cy.getByData('next-page-button-active').should('exist').click();
