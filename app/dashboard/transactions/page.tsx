@@ -34,7 +34,7 @@ export default async function Page({
         <h1 className={`${lusitana.className} ${styles.headingText}`}>
           Transactions
         </h1>
-        <Link href="/transactions/create">
+        <Link href="/dashboard/transactions/create">
           <Button
             data-test="create-transaction-button"
             variant="contained"

@@ -165,7 +165,7 @@ export default function EditForm({
           </div>
         </div>
         <div className={styles.buttonContainer}>
-          <Link href="/transactions">
+          <Link href="/dashboard/transactions">
             <Button data-test="edit-cancel" variant="outlined">
               Cancel
             </Button>
