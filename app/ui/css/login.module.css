@@ -1,8 +1,29 @@
-.pageContainer {
+.pageCanvas {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
+}
+
+.pageContainer {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  width: 100%;
+  max-width: 400px;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.pageHeading {
+  display: flex;
+  height: 5rem;
+  width: 100%;
+  align-items: flex-end;
+  border-radius: 0.5rem;
+  background-color: rgb(0 112 243 / 1);
+  padding: 0.75rem;
 }
 
 .loginForm {
@@ -18,6 +39,8 @@
   padding-right: 1.5rem;
   padding-bottom: 1rem;
   padding-top: 2rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0;
 }
 
 .loginHeading {
@@ -30,41 +53,21 @@
   width: 100%;
 }
 
-.loginLabel {
-  margin-bottom: 0.75rem;
-  margin-top: 1.25rem;
+.loginButtonIcon {
   display: block;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 500;
-  color: rgb(17 24 39 / 1);
+  vertical-align: middle;
+  margin-left: auto;
+  height: 1.25rem;
+  width: 1.25rem;
+  color: rgb(249 250 251 / 1);
 }
 
-.loginFieldContainer {
-  position: relative;
-}
+@media only screen and (min-width: 768px) {
+  .pageContainer {
+    margin-top: -8rem;
+  }
 
-.loginField {
-  display: block;
-  width: 100%;
-  border-radius: 0.375rem;
-  border-width: 1px;
-  border-color: rgb(229 231 235 / 1);
-  padding-top: 9px;
-  padding-bottom: 9px;
-  padding-left: 2.5rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  outline-width: 2px;
-}
-
-.loginFieldIcon {
-  pointer-events: none;
-  position: absolute;
-  left: 0.75rem;
-  top: 50%;
-  height: 18px;
-  width: 18px;
-  transform: translate(0, -50%) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1);
-  color: rgb(107 114 128 / 1);
+  .pageHeading {
+    height: 9rem;
+  }
 }
