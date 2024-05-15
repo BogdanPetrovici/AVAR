@@ -272,22 +272,3 @@ async function createTags(
   const tagsCreationResponse = await docClient.send(createTagsCommand);
   return tagsCreationResponse;
 }
-
-export async function authenticate(
-  prevState: string | undefined,
-  formData: FormData,
-) {
-  try {
-    await signIn('cognito');
-  } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case 'CredentialsSignin':
-          return 'Invalid credentials.';
-        default:
-          return 'Something went wrong.';
-      }
-    }
-    throw error;
-  }
-}
