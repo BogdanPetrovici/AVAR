@@ -67,6 +67,7 @@
 
 .menuItemLogOff {
   width: 100%;
+  font-family: inherit;
 }
 
 .menuItemSelected {

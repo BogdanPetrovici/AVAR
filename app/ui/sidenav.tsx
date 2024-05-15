@@ -4,7 +4,7 @@ import Link from 'next/link';
 import NavLinks from '@/app/ui/nav-links';
 import AcmeLogo from '@/app/ui/acme-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
-import { signIn, signOut } from '@/auth';
+import { signOut } from '@/auth';
 
 export default function SideNav() {
   return (
