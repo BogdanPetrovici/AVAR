@@ -18,10 +18,13 @@ export default function SideNav() {
         <form
           action={async () => {
             'use server';
-            await signOut();
+            await signOut({ redirect: true, redirectTo: '/login' });
           }}
         >
-          <button className={`${styles.menuItem} ${styles.menuItemLogOff}`}>
+          <button
+            className={`${styles.menuItem} ${styles.menuItemLogOff}`}
+            data-test="logout-button"
+          >
             <PowerIcon className={styles.menuItemIcon} />
             <div className={styles.menuItemText}>Sign Out</div>
           </button>
