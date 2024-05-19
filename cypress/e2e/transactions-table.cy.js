@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 
 describe('Transactions Table', () => {
   beforeEach(() => {
+    cy.login();
     cy.visit('/dashboard/transactions');
   });
 
@@ -23,7 +24,7 @@ describe('Transactions Table', () => {
 
   it('should open transaction creation form when clicking create button', () => {
     cy.getByData('create-transaction-button').click();
-    cy.location('pathname').should('eq', '/transactions/create');
+    cy.location('pathname').should('eq', '/dashboard/transactions/create');
   });
 
   it('opens transaction update form when clicking update button', () => {
@@ -61,7 +62,7 @@ describe('Transactions Table', () => {
     cy.getByData('transactionsTable').get('tbody tr').should('have.length', 0);
   });
 
-  it.only('clicking next button displays next page in transactions table', () => {
+  it('clicking next button displays next page in transactions table', () => {
     cy.visit('/dashboard/transactions?from=2023-12-01&to=2023-12-09');
     cy.getByData('transactionsTable').get('tbody tr').should('have.length', 10);
     cy.getByData('next-page-button-disabled').should('not.exist');

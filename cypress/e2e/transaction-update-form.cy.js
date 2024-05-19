@@ -3,6 +3,7 @@ import { Guid } from 'guid-typescript';
 
 describe('Transaction Creation Form', () => {
   beforeEach(() => {
+    cy.login();
     cy.visit(
       '/dashboard/transactions/20240325-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
     );
@@ -160,7 +161,7 @@ describe('Transaction Creation Form', () => {
       .click();
     cy.getByData('delete-submit').click();
     cy.getByData('delete-form').click();
-    cy.location('pathname').should('eq', '/transactions');
+    cy.location('pathname').should('eq', '/dashboard/transactions');
     cy.getByData('transactionsTable')
       .find('tbody tr')
       .find('.MuiChip-label')
@@ -192,7 +193,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('cancel-delete').click();
     //no redirection
     cy.location('pathname').should('contain', '/edit');
-    cy.visit('/transactions');
+    cy.visit('/dashboard/transactions');
     //transaction still exists
     cy.getByData('transactionsTable')
       .find('tbody tr')

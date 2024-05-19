@@ -3,6 +3,7 @@ import { Guid } from 'guid-typescript';
 
 describe('Transaction Creation Form', () => {
   beforeEach(() => {
+    cy.login();
     cy.visit('/dashboard/transactions/create');
   });
 
@@ -119,7 +120,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('transaction-tags').type(`${testTag}{enter}`);
     cy.getByData('transaction-date').type(today.format('YYYY-MM-DD'));
     cy.getByData('edit-submit').click();
-    cy.location('pathname').should('eq', '/transactions');
+    cy.location('pathname').should('eq', '/dashboard/transactions');
     cy.getByData('fromDate').type(today.format('YYYY-MM-DD'));
     cy.getByData('toDate').type(today.format('YYYY-MM-DD'));
     cy.getByData('transactionsTable')
