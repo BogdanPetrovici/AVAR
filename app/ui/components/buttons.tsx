@@ -7,7 +7,10 @@ import Link from 'next/link';
 
 export function UpdateTransaction({ id }: { id: string }) {
   return (
-    <Link href={`/transactions/${id}/edit`} className={styles.editButton}>
+    <Link
+      href={`/dashboard/transactions/${id}/edit`}
+      className={styles.editButton}
+    >
       <PencilIcon className={styles.editButtonIcon} />
     </Link>
   );

@@ -16,7 +16,7 @@ export default function NotFound() {
         data-test="redirect-button"
         variant="contained"
         type="link"
-        href="/transactions"
+        href="/dashboard/transactions"
         sx={{ marginTop: '1rem' }}
       >
         Go Back

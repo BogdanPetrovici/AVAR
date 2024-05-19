@@ -14,6 +14,9 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import dayjs from 'dayjs';
 
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
+
 export type State = {
   errors?: {
     Date?: string[];
@@ -89,8 +92,8 @@ export async function createTransactionAction(
     };
   }
 
-  revalidatePath('/transactions');
-  redirect('/transactions');
+  revalidatePath('/dashboard/transactions');
+  redirect('/dashboard/transactions');
 }
 
 const UpdateTransaction = FormSchema.omit({ PK: true, SK: true });
@@ -166,8 +169,8 @@ export async function updateTransaction(
     };
   }
 
-  revalidatePath('/transactions');
-  redirect('/transactions');
+  revalidatePath('/dashboard/transactions');
+  redirect('/dashboard/transactions');
 }
 
 export async function deleteTransactionAction(id: string, formData: FormData) {
@@ -186,8 +189,8 @@ export async function deleteTransactionAction(id: string, formData: FormData) {
     };
   }
 
-  revalidatePath('/transactions');
-  redirect('/transactions');
+  revalidatePath('/dashboard/transactions');
+  redirect('/dashboard/transactions');
 }
 
 async function createTransaction(

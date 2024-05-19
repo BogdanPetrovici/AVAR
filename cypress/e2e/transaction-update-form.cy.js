@@ -3,8 +3,9 @@ import { Guid } from 'guid-typescript';
 
 describe('Transaction Creation Form', () => {
   beforeEach(() => {
+    cy.login();
     cy.visit(
-      '/transactions/20240325-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
+      '/dashboard/transactions/20240325-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
     );
   });
 
@@ -105,7 +106,7 @@ describe('Transaction Creation Form', () => {
       .type('2024-03-26');
     cy.getByData('edit-submit').click();
     cy.visit(
-      '/transactions/20240326-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
+      '/dashboard/transactions/20240326-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
     );
     //transaction date field should exist if no errors - reset to previous value for future tests
     cy.getByData('transaction-date')
@@ -125,7 +126,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('edit-submit').click();
 
     cy.visit(
-      '/transactions/20240325-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
+      '/dashboard/transactions/20240325-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
     );
 
     // put everything back
@@ -140,7 +141,7 @@ describe('Transaction Creation Form', () => {
 
   it('clicking delete removes transaction', () => {
     //create transaction
-    cy.visit('/transactions/create');
+    cy.visit('/dashboard/transactions/create');
     cy.getByData('transaction-amount').type('12.34');
     let testTag = Guid.create().toString();
     let today = dayjs();
@@ -160,7 +161,7 @@ describe('Transaction Creation Form', () => {
       .click();
     cy.getByData('delete-submit').click();
     cy.getByData('delete-form').click();
-    cy.location('pathname').should('eq', '/transactions');
+    cy.location('pathname').should('eq', '/dashboard/transactions');
     cy.getByData('transactionsTable')
       .find('tbody tr')
       .find('.MuiChip-label')
@@ -170,7 +171,7 @@ describe('Transaction Creation Form', () => {
 
   it('cancelling delete does not remove transaction', () => {
     //create transaction
-    cy.visit('/transactions/create');
+    cy.visit('/dashboard/transactions/create');
     cy.getByData('transaction-amount').type('12.34');
     let testTag = Guid.create().toString();
     let today = dayjs();
@@ -192,7 +193,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('cancel-delete').click();
     //no redirection
     cy.location('pathname').should('contain', '/edit');
-    cy.visit('/transactions');
+    cy.visit('/dashboard/transactions');
     //transaction still exists
     cy.getByData('transactionsTable')
       .find('tbody tr')
@@ -203,7 +204,7 @@ describe('Transaction Creation Form', () => {
 
   it('if transaction not found display 404 error page', () => {
     cy.visit(
-      '/transactions/00000000-00000000-0000-0000-0000-000000000000/edit',
+      '/dashboard/transactions/00000000-00000000-0000-0000-0000-000000000000/edit',
       { failOnStatusCode: false },
     );
     cy.getByData('redirect-button').should('exist');
@@ -214,7 +215,7 @@ describe('Transaction Creation Form', () => {
   });
 
   it('cannot remove year from transaction date', () => {
-    cy.visit('/transactions/create');
+    cy.visit('/dashboard/transactions/create');
     cy.getByData('transaction-amount').type('12.34');
     cy.getByData('transaction-description').type('test description');
     let testTag = Guid.create().toString();
@@ -242,7 +243,7 @@ describe('Transaction Creation Form', () => {
   });
 
   it('cannot remove month from transaction date', () => {
-    cy.visit('/transactions/create');
+    cy.visit('/dashboard/transactions/create');
     cy.getByData('transaction-amount').type('12.34');
     cy.getByData('transaction-description').type('test description');
     let testTag = Guid.create().toString();
@@ -270,7 +271,7 @@ describe('Transaction Creation Form', () => {
   });
 
   it('cannot remove day from transaction date', () => {
-    cy.visit('/transactions/create');
+    cy.visit('/dashboard/transactions/create');
     cy.getByData('transaction-amount').type('12.34');
     cy.getByData('transaction-description').type('test description');
     let testTag = Guid.create().toString();
