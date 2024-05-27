@@ -14,8 +14,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import dayjs from 'dayjs';
 
-import { signIn } from '@/auth';
-import { AuthError } from 'next-auth';
+import { countTransactions } from './data';
 
 export type State = {
   errors?: {
@@ -152,12 +151,8 @@ export async function updateTransaction(
       const response = await docClient.send(command);
     } else {
       // if the date changed, delete the item and recreate it accordingly - the date is part of the range key
-      //get the old guid from the edited transaction
-      let idTokens = id.split('#');
-      if (idTokens.length > 2) {
-        await deleteTransaction(docClient, id);
-        await createTransaction(docClient, validatedFields.data, idTokens[2]);
-      }
+      await deleteTransaction(docClient, id);
+      await createTransaction(docClient, validatedFields.data);
     }
 
     const newTags = formData.getAll('new-transaction-tags');
@@ -206,26 +201,42 @@ async function createTransaction(
     Description: String;
     Tags: string[];
   },
-  guid?: string,
 ) {
   const formattedDate = dayjs(Date).format(_dateValueFormat);
   const formattedDateKey = dayjs(Date).format(_dateKeyFormat);
-  let newGuid = guid ?? Guid.create().toString();
-  const transactionSortKey = `Transaction#${formattedDateKey}#${newGuid}`;
-  const createTransactionCommand = new PutCommand({
-    TableName: _tableName,
-    Item: {
-      PK: 'User#Account1',
-      SK: transactionSortKey,
-      Date: formattedDate,
-      Amount: Amount,
-      Description: Description,
-      Tags: new Set<string>(Tags),
-    },
-  });
-  const transactionCreationResponse = await docClient.send(
-    createTransactionCommand,
-  );
+
+  let operationSuccessful: boolean = false;
+  let retries: number = 0;
+  do {
+    try {
+      const transactionsCount = await countTransactions(formattedDateKey);
+      const transactionId = String(transactionsCount + 1).padStart(4, '0');
+      const transactionSortKey = `Transaction#${formattedDateKey}-${transactionId}`;
+      const createTransactionCommand = new PutCommand({
+        TableName: _tableName,
+        Item: {
+          PK: 'User#Account1',
+          SK: transactionSortKey,
+          Date: formattedDate,
+          Amount: Amount,
+          Description: Description,
+          Tags: new Set<string>(Tags),
+        },
+      });
+      const transactionCreationResponse = await docClient.send(
+        createTransactionCommand,
+      );
+
+      operationSuccessful = true;
+    } catch (ex) {
+      operationSuccessful = false;
+      retries++;
+    }
+  } while (operationSuccessful === false && retries < 5);
+
+  if (operationSuccessful === false && retries == 5) {
+    throw new Error('Could not create transaction');
+  }
 }
 
 async function deleteTransaction(

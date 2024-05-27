@@ -115,6 +115,29 @@ export async function getTransactionById(
   }
 }
 
+export async function countTransactions(dateString: String): Promise<number> {
+  const sortKeyPrefix = `Transaction#${dateString}`;
+  const client = new DynamoDBClient({
+    endpoint: 'http://localhost:8000',
+    region: 'eu-central-1',
+    credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
+  });
+  const docClient = DynamoDBDocumentClient.from(client);
+  const command = new QueryCommand({
+    TableName: _tableName,
+    KeyConditionExpression: 'PK = :pk AND begins_with (SK, :skPrefix)',
+    ExpressionAttributeValues: {
+      ':pk': 'User#Account1',
+      ':skPrefix': sortKeyPrefix,
+    },
+    ProjectionExpression: 'PK,SK',
+    ConsistentRead: false,
+    ScanIndexForward: false,
+  });
+  const response = await docClient.send(command);
+  return response.Count ?? 0;
+}
+
 export async function getTags() {
   noStore();
 

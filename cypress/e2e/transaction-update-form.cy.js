@@ -4,9 +4,7 @@ import { Guid } from 'guid-typescript';
 describe('Transaction Creation Form', () => {
   beforeEach(() => {
     cy.login();
-    cy.visit(
-      '/dashboard/transactions/20240325-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
-    );
+    cy.visit('/dashboard/transactions/20240325-0001/edit');
   });
 
   it('form should open with values set', () => {
@@ -105,9 +103,8 @@ describe('Transaction Creation Form', () => {
       .clear()
       .type('2024-03-26');
     cy.getByData('edit-submit').click();
-    cy.visit(
-      '/dashboard/transactions/20240326-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
-    );
+    cy.location('pathname').should('eq', '/dashboard/transactions');
+    cy.visit('/dashboard/transactions/20240326-0001/edit');
     //transaction date field should exist if no errors - reset to previous value for future tests
     cy.getByData('transaction-date')
       .should('exist')
@@ -124,10 +121,9 @@ describe('Transaction Creation Form', () => {
     cy.get('[data-testid=CloseIcon]').parent().click();
     cy.getByData('transaction-tags').type('OTL{enter}');
     cy.getByData('edit-submit').click();
+    cy.location('pathname').should('eq', '/dashboard/transactions');
 
-    cy.visit(
-      '/dashboard/transactions/20240325-2b28bc9b-5cf0-b256-47a4-7e0ce3c746a1/edit',
-    );
+    cy.visit('/dashboard/transactions/20240325-0001/edit');
 
     // put everything back
     cy.getByData('transaction-amount').should('exist').clear().type('-234.65');
@@ -148,6 +144,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('transaction-tags').type(`${testTag}{enter}`);
     cy.getByData('transaction-date').type(today.format('YYYY-MM-DD'));
     cy.getByData('edit-submit').click();
+    cy.location('pathname').should('eq', '/dashboard/transactions');
     cy.getByData('fromDate').type(today.format('YYYY-MM-DD'));
     cy.getByData('toDate').type(today.format('YYYY-MM-DD'));
     cy.getByData('transactionsTable')
@@ -178,6 +175,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('transaction-tags').type(`${testTag}{enter}`);
     cy.getByData('transaction-date').type(today.format('YYYY-MM-DD'));
     cy.getByData('edit-submit').click();
+    cy.location('pathname').should('eq', '/dashboard/transactions');
     cy.getByData('fromDate').type(today.format('YYYY-MM-DD'));
     cy.getByData('toDate').type(today.format('YYYY-MM-DD'));
     cy.getByData('transactionsTable')
@@ -203,10 +201,9 @@ describe('Transaction Creation Form', () => {
   });
 
   it('if transaction not found display 404 error page', () => {
-    cy.visit(
-      '/dashboard/transactions/00000000-00000000-0000-0000-0000-000000000000/edit',
-      { failOnStatusCode: false },
-    );
+    cy.visit('/dashboard/transactions/00000000-0000/edit', {
+      failOnStatusCode: false,
+    });
     cy.getByData('redirect-button').should('exist');
     cy.getByData('not-found-title').should('exist').contains('404 Not Found');
     cy.getByData('not-found-text')
@@ -223,6 +220,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('transaction-date').type(today.format('YYYY-MM-DD'));
     cy.getByData('transaction-tags').type(`${testTag}{enter}`);
     cy.getByData('edit-submit').click();
+    cy.location('pathname').should('eq', '/dashboard/transactions');
     cy.getByData('fromDate').type(today.format('YYYY-MM-DD'));
     cy.getByData('toDate').type(today.format('YYYY-MM-DD'));
     cy.getByData('transactionsTable')
@@ -251,6 +249,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('transaction-date').type(today.format('YYYY-MM-DD'));
     cy.getByData('transaction-tags').type(`${testTag}{enter}`);
     cy.getByData('edit-submit').click();
+    cy.location('pathname').should('eq', '/dashboard/transactions');
     cy.getByData('fromDate').type(today.format('YYYY-MM-DD'));
     cy.getByData('toDate').type(today.format('YYYY-MM-DD'));
     cy.getByData('transactionsTable')
@@ -279,6 +278,7 @@ describe('Transaction Creation Form', () => {
     cy.getByData('transaction-date').type(today.format('YYYY-MM-DD'));
     cy.getByData('transaction-tags').type(`${testTag}{enter}`);
     cy.getByData('edit-submit').click();
+    cy.location('pathname').should('eq', '/dashboard/transactions');
     cy.getByData('fromDate').type(today.format('YYYY-MM-DD'));
     cy.getByData('toDate').type(today.format('YYYY-MM-DD'));
     cy.getByData('transactionsTable')

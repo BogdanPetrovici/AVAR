@@ -20,11 +20,9 @@ export const formatDateToLocal = (
 
 export const getTransactionId = (transactionSortKey: string): string => {
   const rangeKeyTokens: string[] = transactionSortKey.split('#');
-  return rangeKeyTokens.length == 3
-    ? `${rangeKeyTokens[1]}-${rangeKeyTokens[2]}`
-    : '-';
+  return rangeKeyTokens.length == 2 ? rangeKeyTokens[1] : '-';
 };
 
 export const getTransactionKey = (transactionId: string): string => {
-  return `Transaction#${transactionId.replace('-', '#')}`;
+  return `Transaction#${transactionId}`;
 };
