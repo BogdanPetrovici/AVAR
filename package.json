@@ -2,13 +2,15 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "cypress:open": "cypress open",
     "dev": "next dev",
+    "e2e:ci": "cypress run --browser chrome",
+    "e2e:open": "cypress open",
     "lint": "next lint",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
     "seed": "node -r dotenv/config ./scripts/seed.js",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.576.0",
@@ -38,6 +40,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.5",
+    "@testing-library/react": "^15.0.7",
     "@types/bcrypt": "^5.0.2",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.14",
@@ -47,6 +51,8 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.3",
     "eslint-config-prettier": "9.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.2.5"
   },
   "engines": {

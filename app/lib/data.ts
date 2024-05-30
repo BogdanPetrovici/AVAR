@@ -1,4 +1,4 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { dynamoDBClient } from '@/app/lib/aws';
 import {
   QueryCommand,
   DynamoDBDocumentClient,
@@ -27,12 +27,7 @@ export async function fetchLatestTransactions(
   try {
     const sortKeyLowerBound = `Transaction#${fromDate.format(_dateKeyFormat)}`;
     const sortKeyUpperBound = `Transaction#${toDate.add(1, 'day').format(_dateKeyFormat)}`;
-    const client = new DynamoDBClient({
-      endpoint: 'http://localhost:8000',
-      region: 'eu-central-1',
-      credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
-    });
-    const docClient = DynamoDBDocumentClient.from(client);
+    const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
     const command = new QueryCommand({
       TableName: _tableName,
       KeyConditionExpression: 'PK = :pk AND SK BETWEEN :skBottom AND :skTop',
@@ -84,12 +79,7 @@ export async function getTransactionById(
   noStore();
 
   try {
-    const client = new DynamoDBClient({
-      endpoint: 'http://localhost:8000',
-      region: 'eu-central-1',
-      credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
-    });
-    const docClient = DynamoDBDocumentClient.from(client);
+    const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
     const command = new GetCommand({
       TableName: _tableName,
       Key: {
@@ -115,17 +105,29 @@ export async function getTransactionById(
   }
 }
 
+export async function countTransactions(dateString: String): Promise<number> {
+  const sortKeyPrefix = `Transaction#${dateString}`;
+  const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
+  const command = new QueryCommand({
+    TableName: _tableName,
+    KeyConditionExpression: 'PK = :pk AND begins_with (SK, :skPrefix)',
+    ExpressionAttributeValues: {
+      ':pk': 'User#Account1',
+      ':skPrefix': sortKeyPrefix,
+    },
+    ProjectionExpression: 'PK,SK',
+    ConsistentRead: false,
+    ScanIndexForward: false,
+  });
+  const response = await docClient.send(command);
+  return response.Count ?? 0;
+}
+
 export async function getTags() {
   noStore();
 
   try {
-    const client = new DynamoDBClient({
-      endpoint: 'http://localhost:8000',
-      region: 'eu-central-1',
-      credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
-    });
-
-    const docClient = DynamoDBDocumentClient.from(client);
+    const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
     const command = new QueryCommand({
       TableName: _tableName,
       KeyConditionExpression: 'PK = :pk',
