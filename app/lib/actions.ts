@@ -1,7 +1,6 @@
 'use server';
 
 import { Guid } from 'guid-typescript';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
   BatchWriteCommand,
   DeleteCommand,
@@ -15,6 +14,7 @@ import { z } from 'zod';
 import dayjs from 'dayjs';
 
 import { countTransactions } from './data';
+import { dynamoDBClient } from '@/app/lib/aws';
 
 export type State = {
   errors?: {
@@ -75,12 +75,7 @@ export async function createTransactionAction(
   }
 
   try {
-    const client = new DynamoDBClient({
-      endpoint: 'http://localhost:8000',
-      region: 'eu-central-1',
-      credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
-    });
-    const docClient = DynamoDBDocumentClient.from(client);
+    const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
     await createTransaction(docClient, validatedFields.data);
     const newTags = formData.getAll('new-transaction-tags');
     await createTags(docClient, newTags);
@@ -117,12 +112,7 @@ export async function updateTransaction(
       };
     }
 
-    const client = new DynamoDBClient({
-      endpoint: 'http://localhost:8000',
-      region: 'eu-central-1',
-      credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
-    });
-    const docClient = DynamoDBDocumentClient.from(client);
+    const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
 
     const { Date, Amount, Description, Tags } = validatedFields.data;
     const formattedDate = dayjs(Date).format(_dateValueFormat);
@@ -170,12 +160,7 @@ export async function updateTransaction(
 
 export async function deleteTransactionAction(id: string, formData: FormData) {
   try {
-    const client = new DynamoDBClient({
-      endpoint: 'http://localhost:8000',
-      region: 'eu-central-1',
-      credentials: { accessKeyId: 'xxxx', secretAccessKey: 'xxxx' },
-    });
-    const docClient = DynamoDBDocumentClient.from(client);
+    const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
     await deleteTransaction(docClient, id);
   } catch (error) {
     console.error('Database Error:', error);
@@ -188,7 +173,7 @@ export async function deleteTransactionAction(id: string, formData: FormData) {
   redirect('/dashboard/transactions');
 }
 
-async function createTransaction(
+export async function createTransaction(
   docClient: DynamoDBDocumentClient,
   {
     Date,
@@ -205,7 +190,6 @@ async function createTransaction(
   const formattedDate = dayjs(Date).format(_dateValueFormat);
   const formattedDateKey = dayjs(Date).format(_dateKeyFormat);
 
-  let operationSuccessful: boolean = false;
   let retries: number = 0;
   do {
     try {
@@ -222,19 +206,16 @@ async function createTransaction(
           Description: Description,
           Tags: new Set<string>(Tags),
         },
+        ConditionExpression: 'attribute_not_exists(PK)',
       });
-      const transactionCreationResponse = await docClient.send(
-        createTransactionCommand,
-      );
 
-      operationSuccessful = true;
+      return await docClient.send(createTransactionCommand);
     } catch (ex) {
-      operationSuccessful = false;
       retries++;
     }
-  } while (operationSuccessful === false && retries < 5);
+  } while (retries < 5);
 
-  if (operationSuccessful === false && retries == 5) {
+  if (retries == 5) {
     throw new Error('Could not create transaction');
   }
 }
