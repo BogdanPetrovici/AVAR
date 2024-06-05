@@ -3,7 +3,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "e2e:ci": "cypress run --browser chrome",
+    "e2e": "cypress run --browser chrome",
     "e2e:open": "cypress open",
     "lint": "next lint",
     "prettier": "prettier --write --ignore-unknown .",

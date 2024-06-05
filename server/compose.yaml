@@ -1,0 +1,28 @@
+services:
+  server:
+    build:
+      context: .
+      target: prod
+    environment:
+      AUTH_TRUST_HOST: true
+      DYNAMO_DB_HOST: dynamodb
+      DYNAMO_DB_PORT: 8000
+      DYNAMO_DB_REGION: 'eu-central-1'
+      DYNAMO_DB_TABLE: 'Transactions-QA'
+      AUTH_SECRET: M/INNJfFxFXnzsMFAJzEpMai3ZDn5ip0LrkbXM4UqSo=
+      AUTH_COGNITO_ID: 2tvrccm0t62g6cl5un8meqgm9
+      AUTH_COGNITO_SECRET: 11je0rpcvhae9qh3sbllafc1d9k9hgb9klhso3behlkpih56m7fs
+      AUTH_COGNITO_ISSUER: https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_13KAbYsyd
+    ports:
+      - 3000:3000
+    depends_on:
+      - dynamodb
+  dynamodb:
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data --cors 'http://server:3000'"
+    image: 'amazon/dynamodb-local:latest'
+    container_name: dynamodb
+    ports:
+      - 8000:8000
+    volumes:
+      - './db/dynamodb:/home/dynamodblocal/data'
+    working_dir: /home/dynamodblocal
