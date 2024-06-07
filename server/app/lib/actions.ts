@@ -13,7 +13,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import dayjs from 'dayjs';
 
-import { countTransactions } from './data';
+import { transactionRepository } from './repository/transaction';
 import { dynamoDBClient } from '@/app/lib/aws';
 
 export type State = {
@@ -193,7 +193,8 @@ export async function createTransaction(
   let retries: number = 0;
   do {
     try {
-      const transactionsCount = await countTransactions(formattedDateKey);
+      const transactionsCount =
+        await transactionRepository.count(formattedDateKey);
       const transactionId = String(transactionsCount + 1).padStart(4, '0');
       const transactionSortKey = `Transaction#${formattedDateKey}-${transactionId}`;
       const createTransactionCommand = new PutCommand({

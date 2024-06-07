@@ -7,7 +7,7 @@ import TransactionsFilter from '@/app/ui/transactions/transactions-filter';
 import TransactionsTable from '@/app/ui/transactions/transactions-table';
 import { Dayjs } from 'dayjs';
 
-import { fetchLatestTransactions } from '@/app/lib/data';
+import { transactionRepository } from '@/app/lib/repository/transaction';
 import { getTransactionId } from '@/app/lib/utils';
 
 export default async function Transactions({
@@ -19,7 +19,7 @@ export default async function Transactions({
   to: Dayjs;
   page?: string;
 }) {
-  let transactionData = await fetchLatestTransactions(from, to, page);
+  let transactionData = await transactionRepository.getLatest(from, to, page);
   const nextPage =
     transactionData.lastKey !== undefined
       ? getTransactionId(transactionData.lastKey)

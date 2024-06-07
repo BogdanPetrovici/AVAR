@@ -1,6 +1,7 @@
 import styles from '@/app/ui/css/page.module.css';
 
-import { getTags, getTransactionById } from '@/app/lib/data';
+import { tagRepository } from '@/app/lib/repository/tag';
+import { transactionRepository } from '@/app/lib/repository/transaction';
 import { lusitana } from '@/app/ui/fonts';
 import DeleteForm from '@/app/ui/transactions/delete-form';
 import EditForm from '@/app/ui/transactions/edit-form';
@@ -8,8 +9,8 @@ import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const [transaction, tags] = await Promise.all([
-    getTransactionById(params.id),
-    getTags(),
+    transactionRepository.getById(params.id),
+    tagRepository.getTags(),
   ]);
 
   if (!transaction) {

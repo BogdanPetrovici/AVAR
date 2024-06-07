@@ -1,11 +1,11 @@
 import styles from '@/app/ui/css/page.module.css';
 
-import { getTags } from '@/app/lib/data';
+import { tagRepository } from '@/app/lib/repository/tag';
 import { lusitana } from '@/app/ui/fonts';
 import CreateForm from '@/app/ui/transactions/create-form';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const tags = await getTags();
+  const tags = await tagRepository.getTags();
 
   return (
     <main className={styles.pageContainer}>
