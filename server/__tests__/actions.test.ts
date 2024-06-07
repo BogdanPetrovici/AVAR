@@ -1,9 +1,12 @@
 import '@testing-library/jest-dom';
-import { createTransaction } from '../app/lib/actions';
 import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
 import { dynamoDBClient } from '../app/lib/aws';
 import { expect, jest } from '@jest/globals';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+
+import { transactionRepository } from '../app/lib/repository/transaction';
+
+import { createTransaction } from '../app/lib/actions';
 
 describe('Create transaction action', () => {
   beforeEach(() => {
@@ -11,9 +14,15 @@ describe('Create transaction action', () => {
   });
 
   it('retries creation if id is unavailable', async () => {
+    const transactionRepositorySpy = jest
+      .spyOn(transactionRepository, 'count')
+      .mockImplementation(async (dateString: String) => {
+        return 1;
+      });
     const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
+    const emptySuccessfulResult = {};
     const spy = jest
-      .spyOn(DynamoDBDocumentClient.prototype, 'send')
+      .spyOn(docClient, 'send')
       .mockImplementationOnce(() => {
         throw new ConditionalCheckFailedException({
           $metadata: {},
@@ -21,7 +30,7 @@ describe('Create transaction action', () => {
         });
       })
       .mockImplementationOnce(() => {
-        return {};
+        return emptySuccessfulResult;
       });
 
     const formData = new FormData();
@@ -37,20 +46,23 @@ describe('Create transaction action', () => {
         Description: 'test',
         Tags: ['Kaufland'],
       }),
-    ).resolves;
+    ).resolves.toBe(emptySuccessfulResult);
     expect(spy).toHaveBeenCalledTimes(2);
   });
 
   it('retries sending command only 5 times', async () => {
-    const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
-    const spy = jest
-      .spyOn(DynamoDBDocumentClient.prototype, 'send')
-      .mockImplementation(() => {
-        throw new ConditionalCheckFailedException({
-          $metadata: {},
-          message: '',
-        });
+    const transactionRepositorySpy = jest
+      .spyOn(transactionRepository, 'count')
+      .mockImplementation(async (dateString: String) => {
+        return 1;
       });
+    const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
+    const spy = jest.spyOn(docClient, 'send').mockImplementation(() => {
+      throw new ConditionalCheckFailedException({
+        $metadata: {},
+        message: '',
+      });
+    });
 
     const formData = new FormData();
     formData.append('transaction-date', '2024-05-30');
