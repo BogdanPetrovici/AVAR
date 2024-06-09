@@ -1,0 +1,144 @@
+.nav {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.logoLink {
+  margin-bottom: 0.5rem;
+  display: flex;
+  height: 5rem;
+  align-items: flex-end;
+  justify-content: flex-start;
+  border-radius: 0.375rem;
+  background-color: rgb(47 111 235 / 1);
+  padding: 1rem;
+}
+
+.logoContainer {
+  width: 10rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  line-height: 1;
+  color: rgb(255 255 255 /1);
+}
+
+.logoIcon {
+  height: 48px;
+  width: 48px;
+  transform: translate(0, 0) rotate(15deg) skewX(0) skewY(0) scaleX(1) scaleY(1);
+}
+
+.logoText {
+  font-size: 44px;
+}
+
+.menuItemContainer {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.menuItemContainer > :not([hidden]) ~ :not([hidden]) {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+.menuItem {
+  display: flex;
+  height: 48px;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  background-color: rgb(249 250 251 / 1);
+}
+
+.menuItemLogOff {
+  width: 100%;
+  font-family: inherit;
+}
+
+.menuItemSelected {
+  color: rgb(47 111 235 / 1);
+  background-color: rgb(224 242 254 / 1);
+}
+
+.menuItem:hover {
+  color: rgb(47 111 235 / 1);
+  background-color: rgb(224 242 254 / 1);
+}
+
+.menuItemIcon {
+  width: 1.5rem;
+}
+
+.menuItemText {
+  display: none;
+}
+
+.menuFiller {
+  display: none;
+  height: auto;
+  width: 100%;
+  flex-grow: 1;
+  border-radius: 0.375rem;
+  background-color: rgb(249 250 251 / 1);
+}
+
+@media only screen and (min-width: 768px) {
+  .nav {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+
+  .logoLink {
+    height: 10rem;
+  }
+
+  .menuItemContainer {
+    flex-direction: column;
+  }
+
+  .menuItemContainer > :not([hidden]) ~ :not([hidden]) {
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .menuItem {
+    flex: none;
+    justify-content: flex-start;
+    padding: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .menuItemSelected {
+    flex: none;
+    justify-content: flex-start;
+    padding: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .menuItemText {
+    display: block;
+  }
+
+  .menuFiller {
+    display: block;
+  }
+}
