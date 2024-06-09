@@ -9,10 +9,6 @@ services:
       DYNAMO_DB_PORT: 8000
       DYNAMO_DB_REGION: "eu-central-1"
       DYNAMO_DB_TABLE: "Transactions-QA"
-      AUTH_SECRET: M/INNJfFxFXnzsMFAJzEpMai3ZDn5ip0LrkbXM4UqSo=
-      AUTH_COGNITO_ID: 2tvrccm0t62g6cl5un8meqgm9
-      AUTH_COGNITO_SECRET: 11je0rpcvhae9qh3sbllafc1d9k9hgb9klhso3behlkpih56m7fs
-      AUTH_COGNITO_ISSUER: https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_13KAbYsyd
     ports:
       - 3000:3000
     depends_on:
