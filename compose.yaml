@@ -3,6 +3,11 @@ services:
     build:
       context: ./server
       target: dev
+      secrets:
+        - cognito_client_id
+        - cognito_client_secret
+        - cognito_issuer
+        - auth_js_secret
     environment:
       AUTH_TRUST_HOST: true
       DYNAMO_DB_HOST: dynamodb
@@ -24,3 +29,12 @@ services:
     volumes:
       - "./db/dynamodb:/home/dynamodblocal/data"
     working_dir: /home/dynamodblocal
+secrets:
+  cognito_client_id:
+    file: ./secrets/cognito_client_id.txt
+  cognito_client_secret:
+    file: ./secrets/cognito_client_secret.txt
+  cognito_issuer:
+    file: ./secrets/cognito_issuer.txt
+  auth_js_secret:
+    file: ./secrets/auth_js_secret.txt
