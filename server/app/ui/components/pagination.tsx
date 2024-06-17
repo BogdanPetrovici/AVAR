@@ -1,19 +1,13 @@
 'use client';
 
-import styles from '@/app/ui/css/pagination.module.css';
+import styles from '@/app/ui/css/components/button.module.css';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 export default function Pagination({ nextPage }: { nextPage?: string }) {
-  return (
-    <>
-      <div className={styles.paginationWrapper}>
-        <PaginationArrow direction="right" page={nextPage} />
-      </div>
-    </>
-  );
+  return <PaginationArrow direction="right" page={nextPage} />;
 }
 
 function PaginationArrow({
@@ -32,15 +26,15 @@ function PaginationArrow({
   };
 
   const isDisabled = page === undefined;
-  const className = clsx(styles.paginationLink, {
+  const className = clsx(styles.button, {
     [styles.disabled]: isDisabled,
-    [styles.active]: !isDisabled,
+    '': !isDisabled,
   });
   const icon =
     direction === 'left' ? (
-      <ArrowLeftIcon className={styles.paginationArrow} />
+      <ArrowLeftIcon className={styles.buttonIcon} />
     ) : (
-      <ArrowRightIcon className={styles.paginationArrow} />
+      <ArrowRightIcon className={styles.buttonIcon} />
     );
 
   return isDisabled ? (
