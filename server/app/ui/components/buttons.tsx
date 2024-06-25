@@ -7,7 +7,11 @@ import Link from 'next/link';
 
 export function UpdateTransaction({ id }: { id: string }) {
   return (
-    <Link href={`/dashboard/transactions/${id}/edit`} className={styles.button}>
+    <Link
+      data-test="edit-transaction"
+      href={`/dashboard/transactions/${id}/edit`}
+      className={styles.button}
+    >
       <PencilIcon className={styles.buttonIcon} />
     </Link>
   );
@@ -27,6 +31,7 @@ export function ExpandTransaction({
     : styles.button;
   return (
     <a
+      data-test="expand-row"
       target="_blank"
       type="button"
       className={`${className} ${classes}`}
