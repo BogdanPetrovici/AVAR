@@ -1,6 +1,6 @@
 'use client';
 
-import styles from '@/app/ui/css/components/button.module.css';
+import styles from '@/app/ui/css/components/button.module.scss';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Link from 'next/link';

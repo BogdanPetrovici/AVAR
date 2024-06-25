@@ -1,6 +1,6 @@
 'use client';
 
-import styles from '@/app/ui/css/components/button.module.css';
+import styles from '@/app/ui/css/components/button.module.scss';
 
 import { PencilIcon, ArrowDownIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';

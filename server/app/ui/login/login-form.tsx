@@ -1,7 +1,7 @@
 import { inter, lusitana } from '@/app/ui/fonts';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '@mui/material';
-import styles from '@/app/ui/css/login.module.css';
+import styles from '@/app/ui/css/login.module.scss';
 import { providerMap, signIn } from '@/auth';
 
 export default function LoginForm() {

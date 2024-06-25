@@ -1,4 +1,4 @@
-import styles from '@/app/ui/css/transactions-table.module.css';
+import styles from '@/app/ui/css/transactions-table.module.scss';
 
 import { Transaction } from '@/app/lib/model/transaction';
 import TransactionTableRow from './transaction-table-row';

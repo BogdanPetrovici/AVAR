@@ -1,6 +1,6 @@
 'use client';
 
-import styles from '@/app/ui/css/transactions-table.module.css';
+import styles from '@/app/ui/css/transactions-table.module.scss';
 import { Chip } from '@mui/material';
 
 import {

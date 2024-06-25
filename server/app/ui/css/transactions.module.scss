@@ -1,3 +1,5 @@
+@use 'global-vars.scss';
+
 .filterContainer {
   display: flex;
   margin-top: 1rem;
@@ -47,7 +49,7 @@
   justify-content: center;
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: global-vars.$desktop-width) {
   .filterContainer {
     margin-top: 2rem;
   }

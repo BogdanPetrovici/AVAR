@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const path = require('path');
+const nextConfig = {
+  sassOptions: {
+    includePaths: [path.join(__dirname, 'ui/css')],
+  },
+};
 
 module.exports = nextConfig;

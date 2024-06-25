@@ -1,4 +1,4 @@
-import styles from '@/app/ui/css/transactions.module.css';
+import styles from '@/app/ui/css/transactions.module.scss';
 
 import { Suspense } from 'react';
 import { Skeleton } from '@mui/material';

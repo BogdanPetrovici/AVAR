@@ -1,4 +1,4 @@
-import styles from '@/app/ui/css/nav.module.css';
+import styles from '@/app/ui/css/nav.module.scss';
 import { GlobeAltIcon } from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/ui/fonts';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import styles from '@/app/ui/css/nav.module.css';
+import styles from '@/app/ui/css/nav.module.scss';
 
 import {
   UserGroupIcon,

@@ -1,3 +1,5 @@
+@use 'global-vars.scss';
+
 .bodyText {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -20,7 +22,7 @@
   padding: 1.5rem;
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: global-vars.$desktop-width) {
   .appContainer {
     flex-direction: row;
     overflow: hidden;
