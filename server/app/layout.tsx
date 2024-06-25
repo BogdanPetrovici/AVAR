@@ -1,5 +1,5 @@
 import '@/app/ui/css/global.css';
-import styles from '@/app/ui/css/layout.module.css';
+import styles from '@/app/ui/css/layout.module.scss';
 import { inter } from '@/app/ui/fonts';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 

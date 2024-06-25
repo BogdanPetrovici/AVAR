@@ -1,4 +1,4 @@
-import styles from '@/app/ui/css/nav.module.css';
+import styles from '@/app/ui/css/nav.module.scss';
 
 import Link from 'next/link';
 import NavLinks from '@/app/ui/nav-links';

@@ -1,4 +1,4 @@
-import styles from '@/app/ui/css/page.module.css';
+import styles from '@/app/ui/css/page.module.scss';
 import { lusitana } from '@/app/ui/fonts';
 
 import Transactions from '@/app/ui/transactions/transactions';
@@ -40,7 +40,7 @@ export default async function Page({
             variant="contained"
             type="button"
           >
-            Create transaction
+            +
           </Button>
         </Link>
       </header>

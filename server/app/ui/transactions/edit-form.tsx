@@ -2,7 +2,7 @@
 
 import dayjs from 'dayjs';
 
-import styles from '@/app/ui/css/transaction.module.css';
+import styles from '@/app/ui/css/transaction.module.scss';
 
 import { Autocomplete, Box, Button, Chip, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';

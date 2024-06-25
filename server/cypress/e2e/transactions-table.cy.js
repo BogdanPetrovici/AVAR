@@ -71,4 +71,99 @@ describe('Transactions Table', () => {
     cy.getByData('next-page-button-active').should('not.exist');
     cy.getByData('next-page-button-disabled').should('exist');
   });
+
+  it(`should show the tags column on desktop screens`, () => {
+    cy.getByData('transactionsTable')
+      .find('tbody tr')
+      .each(($el) => {
+        cy.wrap($el).children().eq(2).should('not.have.css', 'display', 'none');
+      });
+  });
+
+  it(`should not display button to expand transaction details on desktop screens`, () => {
+    cy.getByData('transactionsTable')
+      .find('tbody tr')
+      .each(($el) => {
+        cy.wrap($el)
+          .find('a[data-test=expand-row]')
+          .should('have.css', 'display', 'none');
+      });
+  });
+
+  const sizes = [
+    'ipad-2',
+    'ipad-mini',
+    'iphone-4',
+    'iphone-5',
+    'iphone-6',
+    'iphone-6+',
+    'iphone-7',
+    'iphone-8',
+    'iphone-x',
+    'iphone-xr',
+    'iphone-se2',
+    'samsung-note9',
+    'samsung-s10',
+  ];
+
+  sizes.forEach((size) => {
+    it(`should hide the tags column on ${size} screens`, () => {
+      if (Cypress._.isArray(size)) {
+        cy.viewport(size[0], size[1]);
+      } else {
+        cy.viewport(size);
+      }
+
+      cy.getByData('transactionsTable')
+        .find('tbody tr')
+        .each(($el) => {
+          cy.wrap($el).children().eq(2).should('have.css', 'display', 'none');
+        });
+    });
+
+    it(`should display button to expand transaction details on ${size} screens`, () => {
+      if (Cypress._.isArray(size)) {
+        cy.viewport(size[0], size[1]);
+      } else {
+        cy.viewport(size);
+      }
+
+      cy.getByData('transactionsTable')
+        .find('tbody tr')
+        .each(($el) => {
+          cy.wrap($el)
+            .find('a[data-test=expand-row]')
+            .should('exist')
+            .should('have.length', 1);
+        });
+    });
+
+    it(`should expand details when clicking button on ${size} screens`, () => {
+      if (Cypress._.isArray(size)) {
+        cy.viewport(size[0], size[1]);
+      } else {
+        cy.viewport(size);
+      }
+
+      let rowCount = 0;
+      cy.getByData('transactionsTable')
+        .find('tbody tr')
+        .then(($el) => {
+          rowCount = $el.length;
+        });
+
+      cy.getByData('transactionsTable')
+        .find('tbody tr')
+        .each(($el) => {
+          cy.wrap($el).find('a[data-test=expand-row]').should('exist').click();
+          cy.getByData('transactionsTable')
+            .find('tbody tr')
+            .should('have.length', rowCount + 2);
+          cy.wrap($el).find('a[data-test=expand-row]').should('exist').click();
+          cy.getByData('transactionsTable')
+            .find('tbody tr')
+            .should('have.length', rowCount);
+        });
+    });
+  });
 });

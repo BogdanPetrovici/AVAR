@@ -1,0 +1,78 @@
+@use 'global-vars.scss';
+
+.tableContainer {
+  border-radius: 0.5rem;
+  background-color: #f9fafbff;
+  padding: 0.5rem;
+  margin-top: 1.5rem;
+  box-shadow: none;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.responsiveTable {
+  width: 100%;
+}
+
+.responsiveTable tbody tr {
+  border-bottom-width: 1px;
+}
+
+.responsiveTable tbody tr:last-child {
+  border: none;
+}
+
+.responsiveTable th,
+.responsiveTable td {
+  text-align: left;
+  color: #111827;
+  white-space: nowrap;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  letter-spacing: 0.01071em;
+}
+
+.responsiveTable th {
+  font-weight: 500;
+}
+
+.responsiveTable td {
+  background-color: #fff;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+@keyframes fadeInAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  opacity: 0;
+  animation: fadeInAnimation ease-in 1;
+  animation-fill-mode: forwards;
+  animation-duration: 200ms;
+}
+
+.optionalCell {
+  display: none;
+}
+
+@media only screen and (min-width: global-vars.$desktop-width) {
+  .optionalCell {
+    display: table-cell;
+  }
+
+  .expandButton {
+    display: none;
+  }
+}

@@ -1,3 +1,5 @@
+@use 'global-vars.scss';
+
 .pageCanvas {
   display: flex;
   align-items: center;
@@ -62,7 +64,7 @@
   color: rgb(249 250 251 / 1);
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: global-vars.$desktop-width) {
   .pageContainer {
     margin-top: -8rem;
   }

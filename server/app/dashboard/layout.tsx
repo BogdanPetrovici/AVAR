@@ -1,6 +1,6 @@
 import SideNav from '@/app/ui/sidenav';
 import { Toaster } from 'react-hot-toast';
-import styles from '@/app/ui/css/layout.module.css';
+import styles from '@/app/ui/css/layout.module.scss';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

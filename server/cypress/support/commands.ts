@@ -22,7 +22,7 @@ Cypress.Commands.add('login', () => {
     const expiration = Math.round(Date.now() / 1000 + maxAge);
     cy.setCookie(
       'authjs.session-token',
-      'eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoiSEotYksxNVRRM0dNTGxBMWNjREVFX3F1NVVKbFJ1VW9aTFdjRk1vLUxBdmtFN1NBdURUUUkyU0d5NXRsNjY1LW8zWXhxMnFEd1oyQ3RkT2duckUyOUEifQ..RS4Avn3Gz_-y7g7A_AcedQ.Nm-Sl0WSPRYLYV3Lt4lsEOrsUcFuCPr1QeEXspwY_FwkJ9dePxGcShHr3_kspoVHXqFn1izb9fXio7ztAecIvpg8kfMPUfhHaMA4a4eVewHP8WAPTCFAgTPyjPaI0RwbRr8ID0AzlMd_YR5YJDsJWvDBMTkUciGwFn5P5Rw66AiAHK8r25eMI-0UPlni3McyRKF1LWJZoljL-AOwv-8sxa7zaJ5yG5y0A4-Bf7-V_YQ.h2lAWhjSr3sYf0F_RIym2XH57N_mMYMWq0lN1OO67DI',
+      'eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoiSEotYksxNVRRM0dNTGxBMWNjREVFX3F1NVVKbFJ1VW9aTFdjRk1vLUxBdmtFN1NBdURUUUkyU0d5NXRsNjY1LW8zWXhxMnFEd1oyQ3RkT2duckUyOUEifQ..Eh23pCUw557x17h6_QB4HQ._mcDLeeF_2r1ulO7O3kKLGe2tfC1idtoQ2-YqhAmaTtEdi_1g0EtHEST0bh8Xcx6SilJrK6y4G3RFxw6eHRsQr8k5O3tinbLXNFnPrcYwqCG8798mcjpcqkTPj3btq7TPvIGS5wNTwulCzWKog8NbJfZ6KgmD-9_W6SoI0FcldFHvGg1KawwcYnu0p2sVv3AlbKaee71wdSKh_0R4MgRIJ4cE3bnFZuY_hzyBUoruf0.gXf4cTRB5VwfH7ypYyxWuT0xGyRmxjdONf9xZi0SFkM',
       { expiry: expiration },
     );
   });

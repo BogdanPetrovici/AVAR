@@ -1,4 +1,4 @@
-import styles from '@/app/ui/css/page.module.css';
+import styles from '@/app/ui/css/page.module.scss';
 
 import { tagRepository } from '@/app/lib/repository/tag';
 import { transactionRepository } from '@/app/lib/repository/transaction';

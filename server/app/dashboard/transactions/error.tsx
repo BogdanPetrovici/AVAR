@@ -1,6 +1,6 @@
 'use client';
 
-import styles from '@/app/ui/css/error.module.css';
+import styles from '@/app/ui/css/error.module.scss';
 import { Button } from '@mui/material';
 
 export default function Error({
