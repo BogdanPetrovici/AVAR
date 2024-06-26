@@ -25,4 +25,5 @@ jobs:
           AWS_EC2_METADATA_DISABLED: true
 
       - name: Check DynamoDB logs
+        if: always()
         run: sudo docker logs dynamodb-manual
