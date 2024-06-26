@@ -51,6 +51,8 @@ jobs:
           AUTH_TRUST_HOST: true
           DYNAMO_DB_REGION: "eu-central-1"
           DYNAMO_DB_TABLE: "Transactions-QA"
+          DYNAMO_DB_HOST: localhost
+          DYNAMO_DB_PORT: 8000
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
           AUTH_COGNITO_ID: ${{ secrets.AUTH_COGNITO_ID }}
           AUTH_COGNITO_SECRET: ${{ secrets.AUTH_COGNITO_SECRET }}
