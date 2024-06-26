@@ -12,9 +12,7 @@ jobs:
       - name: Setup DynamoDB Local
         uses: rrainn/dynamodb-action@v2.0.1
         with:
-          dbPath: ./db/dynamodb
           sharedDb: true
-          port: 8000
           cors: "*"
 
       - name: Configure other AWS Credentials
