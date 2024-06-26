@@ -18,7 +18,7 @@ jobs:
           cors: "'http://127.0.0.1:3000','http://localhost:3000'"
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: xxxx
           aws-secret-access-key: xxxx
