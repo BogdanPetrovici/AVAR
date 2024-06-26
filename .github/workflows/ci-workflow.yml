@@ -36,14 +36,12 @@ jobs:
         with:
           name: build
           path: ./server/.next
-
+      
+      - name: Set DynamoDb permissions
+        run: sudo chmod -R 777 ./db
+        
       - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v2.0.1
-        with:
-          dbPath: ./db/dynamodb
-          sharedDb: true
-          port: 8000
-          cors: "'http://127.0.0.1:3000','http://localhost:3000'"
+        run: sudo docker run --name dynamodb-manual -d -p 8000:8000 --mount type=bind,source=./db/dynamodb,target=/home/dynamodblocal/data -w /home/dynamodblocal amazon/dynamodb-local:2.4.0 -jar DynamoDBLocal.jar -sharedDb -dbPath ./data --cors 'http://127.0.0.1:3000','http://localhost:3000'
           
       - name: Cypress run
         uses: cypress-io/github-action@v6
