@@ -30,7 +30,7 @@ jobs:
           dbPath: ./db/dynamodb
           sharedDb: true
           port: 8000
-          cors: "*"
+          cors: "http://localhost:3000"
 
   cypress-run:
     runs-on: ubuntu-22.04
