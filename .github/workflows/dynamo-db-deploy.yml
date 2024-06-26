@@ -19,3 +19,5 @@ jobs:
     
       - name: Check DynamoDB
         run: aws dynamodb list-tables --endpoint-url http://localhost:8000
+        env:
+          AWS_EC2_METADATA_DISABLED: true
