@@ -17,8 +17,5 @@ jobs:
           port: 8000
           cors: "'http://127.0.0.1:3000','http://localhost:3000'"
 
-      - name: netstat
-        run: netstat -l
-
       - name: Check DynamoDB
-        run: lsof -i :8000
+        run: aws dynamodb list-tables --endpoint-url http://localhost:8000
