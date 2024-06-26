@@ -16,7 +16,13 @@ jobs:
           sharedDb: true
           port: 8000
           cors: "'http://127.0.0.1:3000','http://localhost:3000'"
-    
+
+      - name: Configure other AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ASIAY34FZKBOKMUTVV7A
+          aws-secret-access-key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+          
       - name: Check DynamoDB
         run: aws dynamodb list-tables --endpoint-url http://localhost:8000 --region eu-central-1
         env:
