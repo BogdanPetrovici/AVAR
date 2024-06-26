@@ -35,6 +35,11 @@ jobs:
   cypress-run:
     runs-on: ubuntu-22.04
     needs: install
+    env:
+      ENVIRONMENT: test
+      AUTH_TRUST_HOST: true
+      DYNAMO_DB_REGION: "eu-central-1"
+      DYNAMO_DB_TABLE: "Transactions-QA"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
