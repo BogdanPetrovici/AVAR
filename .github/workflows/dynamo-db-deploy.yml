@@ -10,11 +10,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v2.0.1
-        with:
-          dbPath: ./db/dynamodb
-          sharedDb: true
-          cors: "*"
+        run: sudo docker run --name dynamodb -d -p 8000:8000 --mount type=bind,source=./db/dynamodb,target=/home/dynamodblocal/data amazon/dynamodb-local -jar DynamoDBLocal.jar -dbPath ./data --cors "*"
 
       - name: Configure other AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
