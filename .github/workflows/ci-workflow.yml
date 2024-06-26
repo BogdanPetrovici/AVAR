@@ -22,7 +22,7 @@ jobs:
         with:
           name: build
           if-no-files-found: error
-          path: build
+          path: ./server/.next
 
       - name: Setup DynamoDB Local
         uses: rrainn/dynamodb-action@v2.0.1
@@ -43,7 +43,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: build
+          path: ./server/.next
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
