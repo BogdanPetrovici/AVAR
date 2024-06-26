@@ -1,0 +1,25 @@
+name: Test DynamoDB deployment
+
+on: workflow_dispatch
+
+jobs:
+  dynamodb:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup DynamoDB Local
+        run: sudo docker run --name dynamodb-manual -d -p 8000:8000 --mount type=bind,source=./db/dynamodb,target=/home/dynamodblocal/data -w /home/dynamodblocal amazon/dynamodb-local:2.4.0 -jar DynamoDBLocal.jar -sharedDb -dbPath ./data --cors "*"
+
+      - name: Configure other AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET }}
+          aws-region: eu-central-1
+          
+      - name: Check DynamoDB
+        run: aws dynamodb list-tables --endpoint-url http://localhost:8000 --region eu-central-1
+        env:
+          AWS_EC2_METADATA_DISABLED: true
