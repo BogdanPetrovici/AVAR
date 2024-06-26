@@ -1,0 +1,24 @@
+name: Test DynamoDB deployment
+
+on: workflow_dispatch
+
+jobs:
+  dynamodb:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup DynamoDB Local
+        uses: rrainn/dynamodb-action@v2.0.1
+        with:
+          dbPath: ./db/dynamodb
+          sharedDb: true
+          port: 8000
+          cors: "'http://127.0.0.1:3000','http://localhost:3000'"
+
+      - name: netstat
+        run: netstat -l
+
+      - name: Check DynamoDB
+        run: lsof -i :8000
