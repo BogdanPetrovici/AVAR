@@ -18,6 +18,6 @@ jobs:
           cors: "'http://127.0.0.1:3000','http://localhost:3000'"
     
       - name: Check DynamoDB
-        run: aws dynamodb list-tables --endpoint-url http://localhost:8000
+        run: aws dynamodb list-tables --endpoint-url http://localhost:8000 --region eu-central-1
         env:
           AWS_EC2_METADATA_DISABLED: true
