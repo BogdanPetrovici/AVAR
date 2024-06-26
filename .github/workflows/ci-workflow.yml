@@ -24,14 +24,6 @@ jobs:
           if-no-files-found: error
           path: ./server/.next
 
-      - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v2.0.1
-        with:
-          dbPath: ./db/dynamodb
-          sharedDb: true
-          port: 8000
-          cors: "http://127.0.0.1:3000"
-
   cypress-run:
     runs-on: ubuntu-22.04
     needs: install
@@ -45,6 +37,14 @@ jobs:
           name: build
           path: ./server/.next
 
+      - name: Setup DynamoDB Local
+        uses: rrainn/dynamodb-action@v2.0.1
+        with:
+          dbPath: ./db/dynamodb
+          sharedDb: true
+          port: 8000
+          cors: "'http://127.0.0.1:3000'"
+          
       - name: Cypress run
         uses: cypress-io/github-action@v6
         env:
