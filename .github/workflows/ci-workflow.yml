@@ -59,3 +59,10 @@ jobs:
           start: npm start
           browser: chrome
           working-directory: ./server
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
