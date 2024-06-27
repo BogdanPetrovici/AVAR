@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import styles from '@/app/ui/css/transaction.module.scss';
 
 import { Autocomplete, Box, Button, Chip, TextField } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 
@@ -50,7 +50,7 @@ export default function CreateForm({ tags }: { tags: Tag[] }) {
       <Box component="form" noValidate autoComplete="off" action={formAction}>
         <div className={styles.formContainer}>
           <div className={styles.fieldContainer}>
-            <DatePicker
+            <DesktopDatePicker
               name="transaction-date"
               key="transaction-date"
               format="YYYY-MM-DD"

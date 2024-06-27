@@ -31,7 +31,11 @@ describe('Transactions Table', () => {
     cy.getByData('fromDate').type('2023-12-12');
     cy.getByData('toDate').type('2023-12-16');
     cy.getByData('filterButton').click();
-    cy.getByData('transactionsTable').find('tbody tr').eq(0).find('a').click();
+    cy.getByData('transactionsTable')
+      .find('tbody tr')
+      .eq(0)
+      .find('a[data-test=edit-transaction]')
+      .click();
     cy.location('pathname').should(
       'to.match',
       /^\/dashboard\/transactions\/[0-9a-f-]+\/edit/,

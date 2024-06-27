@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Button, FormHelperText } from '@mui/material';
 
@@ -50,7 +50,7 @@ export default function TransactionsFilter({
         <div className={styles.filterInputContainer}>
           <span className={styles.filterInputLabel}>From:</span>
           <div className={styles.fieldContainer}>
-            <DatePicker
+            <DesktopDatePicker
               key="fromDate"
               format="YYYY-MM-DD"
               value={fromDate}
@@ -74,7 +74,7 @@ export default function TransactionsFilter({
           </div>
           <span className={styles.filterInputLabel}>To:</span>
           <div className={styles.fieldContainer}>
-            <DatePicker
+            <DesktopDatePicker
               key="toDate"
               format="YYYY-MM-DD"
               value={toDate}

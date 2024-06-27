@@ -154,7 +154,7 @@ describe('Transaction Creation Form', () => {
       .parent()
       .parent()
       .parent()
-      .find('a')
+      .find('a[data-test=edit-transaction]')
       .click();
     cy.getByData('delete-submit').click();
     cy.getByData('delete-form').click();
@@ -185,7 +185,7 @@ describe('Transaction Creation Form', () => {
       .parent()
       .parent()
       .parent()
-      .find('a')
+      .find('a[data-test=edit-transaction]')
       .click();
     cy.getByData('delete-submit').click();
     cy.getByData('cancel-delete').click();
@@ -230,7 +230,7 @@ describe('Transaction Creation Form', () => {
       .parent()
       .parent()
       .parent()
-      .find('a')
+      .find('a[data-test=edit-transaction]')
       .click();
     cy.getByData('transaction-date').click().type('{del}');
     cy.getByData('edit-submit').click();
@@ -259,7 +259,7 @@ describe('Transaction Creation Form', () => {
       .parent()
       .parent()
       .parent()
-      .find('a')
+      .find('a[data-test=edit-transaction]')
       .click();
     cy.getByData('transaction-date').click().type('{rightArrow}{del}');
     cy.getByData('edit-submit').click();
@@ -288,7 +288,7 @@ describe('Transaction Creation Form', () => {
       .parent()
       .parent()
       .parent()
-      .find('a')
+      .find('a[data-test=edit-transaction]')
       .click();
     cy.getByData('transaction-date')
       .click()
