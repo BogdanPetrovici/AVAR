@@ -1,14 +1,14 @@
 import styles from '@/app/ui/css/page.module.scss';
 
-import { tagRepository } from '@/app/lib/repository/tag';
-import { transactionRepository } from '@/app/lib/repository/transaction';
+import { tagRepository } from '@/app/lib/repository/tag.repository';
+import { transactionRepository } from '@/app/lib/repository/transaction.repository';
 import { lusitana } from '@/app/ui/fonts';
 import DeleteForm from '@/app/ui/transactions/delete-form';
 import EditForm from '@/app/ui/transactions/edit-form';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const [transaction, tags] = await Promise.all([
+  const [transaction, tagData] = await Promise.all([
     transactionRepository.getById(params.id),
     tagRepository.getTags(),
   ]);
@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         </div>
         <DeleteForm transaction={transaction} />
       </header>
-      <EditForm transaction={transaction} tags={tags} />
+      <EditForm transaction={transaction} tags={tagData.Tags} />
     </main>
   );
 }

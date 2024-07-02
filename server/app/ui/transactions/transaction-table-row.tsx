@@ -1,6 +1,6 @@
 'use client';
 
-import styles from '@/app/ui/css/transactions-table.module.scss';
+import styles from '@/app/ui/css/responsive-table.module.scss';
 import { Chip } from '@mui/material';
 
 import {
@@ -13,7 +13,7 @@ import {
   formatCurrency,
   getTransactionId,
 } from '@/app/lib/utils';
-import { Transaction } from '@/app/lib/model/transaction';
+import { Transaction } from '@/app/lib/model/transaction.model';
 import { useState } from 'react';
 
 export default function TransactionTableRow({

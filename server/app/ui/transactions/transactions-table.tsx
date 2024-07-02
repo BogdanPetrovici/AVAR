@@ -1,6 +1,6 @@
-import styles from '@/app/ui/css/transactions-table.module.scss';
+import styles from '@/app/ui/css/responsive-table.module.scss';
 
-import { Transaction } from '@/app/lib/model/transaction';
+import { Transaction } from '@/app/lib/model/transaction.model';
 import TransactionTableRow from './transaction-table-row';
 
 export default async function TransactionsTable({

@@ -1,11 +1,11 @@
 import styles from '@/app/ui/css/page.module.scss';
 
-import { tagRepository } from '@/app/lib/repository/tag';
+import { tagRepository } from '@/app/lib/repository/tag.repository';
 import { lusitana } from '@/app/ui/fonts';
 import CreateForm from '@/app/ui/transactions/create-form';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const tags = await tagRepository.getTags();
+  const tagData = await tagRepository.getTags();
 
   return (
     <main className={styles.pageContainer}>
@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           </h1>
         </div>
       </header>
-      <CreateForm tags={tags} />
+      <CreateForm tags={tagData.Tags} />
     </main>
   );
 }

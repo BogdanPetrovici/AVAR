@@ -7,7 +7,7 @@ import {
 import { Dayjs } from 'dayjs';
 import { unstable_noStore as noStore } from 'next/cache';
 
-import { Transaction } from '../model/transaction';
+import { Transaction } from '../model/transaction.model';
 
 import { getTransactionKey } from '../utils';
 

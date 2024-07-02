@@ -4,7 +4,7 @@ import { dynamoDBClient } from '../app/lib/aws';
 import { expect, jest } from '@jest/globals';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
-import { transactionRepository } from '../app/lib/repository/transaction';
+import { transactionRepository } from '../app/lib/repository/transaction.repository';
 
 import { createTransaction } from '../app/lib/actions';
 

@@ -13,7 +13,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import dayjs from 'dayjs';
 
-import { transactionRepository } from './repository/transaction';
+import { transactionRepository } from './repository/transaction.repository';
 import { dynamoDBClient } from '@/app/lib/aws';
 
 export type State = {

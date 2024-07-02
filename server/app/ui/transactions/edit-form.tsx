@@ -11,8 +11,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 
 import Link from 'next/link';
 
-import { Transaction } from '@/app/lib/model/transaction';
-import { Tag } from '@/app/lib/model/tag';
+import { Transaction } from '@/app/lib/model/transaction.model';
+import { Tag } from '@/app/lib/model/tag.model';
 import { updateTransaction, State } from '@/app/lib/actions';
 import { useState } from 'react';
 import { useFormState } from 'react-dom';
