@@ -41,6 +41,12 @@
   background-color: #fff;
 }
 
+.responsiveTable td a {
+  display: block;
+  margin: -0.75rem;
+  padding: 0.75rem;
+}
+
 .buttonContainer {
   display: flex;
   justify-content: flex-end;
