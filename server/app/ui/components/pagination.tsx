@@ -1,6 +1,8 @@
 'use client';
 
-import styles from '@/app/ui/css/components/button.module.scss';
+import buttonStyles from '@/app/ui/css/components/button.module.scss';
+import paginationStyles from '@/app/ui/css/components/pagination.module.scss';
+
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -26,28 +28,32 @@ function PaginationArrow({
   };
 
   const isDisabled = page === undefined;
-  const className = clsx(styles.button, {
-    [styles.disabled]: isDisabled,
+  const className = clsx(buttonStyles.button, {
+    [buttonStyles.disabled]: isDisabled,
     '': !isDisabled,
   });
   const icon =
     direction === 'left' ? (
-      <ArrowLeftIcon className={styles.buttonIcon} />
+      <ArrowLeftIcon className={buttonStyles.buttonIcon} />
     ) : (
-      <ArrowRightIcon className={styles.buttonIcon} />
+      <ArrowRightIcon className={buttonStyles.buttonIcon} />
     );
 
   return isDisabled ? (
-    <div data-test="next-page-button-disabled" className={className}>
-      {icon}
+    <div className={paginationStyles.paginationContainer}>
+      <div data-test="next-page-button-disabled" className={className}>
+        {icon}
+      </div>
     </div>
   ) : (
-    <Link
-      data-test="next-page-button-active"
-      className={className}
-      href={createPageURL(page)}
-    >
-      {icon}
-    </Link>
+    <div className={paginationStyles.paginationContainer}>
+      <Link
+        data-test="next-page-button-active"
+        className={className}
+        href={createPageURL(page)}
+      >
+        {icon}
+      </Link>
+    </div>
   );
 }
