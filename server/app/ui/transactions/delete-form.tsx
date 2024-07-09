@@ -1,7 +1,7 @@
 'use client';
 
 import { deleteTransactionAction } from '@/app/lib/actions';
-import { Transaction } from '@/app/lib/model/transaction';
+import { Transaction } from '@/app/lib/model/transaction.model';
 
 import {
   Button,

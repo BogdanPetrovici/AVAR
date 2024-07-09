@@ -35,7 +35,9 @@ export default async function Tags({ page }: { page?: string }) {
               return (
                 <tr key={tag.PK + tag.SK}>
                   <td>
-                    <Link href="#">{tag.Name}</Link>
+                    <Link className={styles.rowLink} href="#">
+                      {tag.Name}
+                    </Link>
                   </td>
                 </tr>
               );
