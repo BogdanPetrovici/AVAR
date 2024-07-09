@@ -1,10 +1,12 @@
 import { dynamoDBClient } from '@/app/lib/aws';
 import { QueryCommand, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import { InternalServerError } from '@aws-sdk/client-dynamodb';
 
 import { unstable_noStore as noStore } from 'next/cache';
 
 import { TagList } from '@/app/lib/view-model/tag-list.viewmodel';
-import { Tag } from '../model/tag.model';
+import { Tag } from '@/app/lib/model/tag.model';
+import { StartingKeyNotFoundError } from '@/app/lib/errors/starting-key-not-found.error';
 
 const _tableName: string = process.env.DYNAMO_DB_TABLE ?? '';
 
@@ -51,6 +53,11 @@ export class TagRepository {
 
       return { Tags: tags, LastKey: response.LastEvaluatedKey?.SK };
     } catch (error) {
+      //Make sure this comes from DynamoDb
+      if (error instanceof Error && error.name === 'ValidationException') {
+        throw new StartingKeyNotFoundError();
+      }
+
       console.error('Database error:', error);
       throw new Error('Could not fetch tags');
     }

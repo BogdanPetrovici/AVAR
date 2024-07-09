@@ -1,20 +1,51 @@
-import { tagRepository } from '@/app/lib/repository/tag';
-import { Tag } from '@/app/lib/model/tag';
+import styles from '@/app/ui/css/responsive-table.module.scss';
 
-export default async function Tags() {
-  const tags: Tag[] = await tagRepository.getTags();
+import { tagRepository } from '@/app/lib/repository/tag.repository';
+import { StartingKeyNotFoundError } from '@/app/lib/errors/starting-key-not-found.error';
+import { TagList } from '@/app/lib/view-model/tag-list.viewmodel';
+
+import Pagination from '@/app/ui/components/pagination';
+
+import Link from 'next/link';
+
+export default async function Tags({ page }: { page?: string }) {
+  let tagData: TagList;
+  try {
+    tagData = await tagRepository.getTags(15, page);
+  } catch (error) {
+    if (error instanceof StartingKeyNotFoundError) {
+      tagData = await tagRepository.getTags(15);
+    } else {
+      throw error;
+    }
+  }
+
+  const nextPage = tagData.LastKey;
+
   return (
-    <table>
-      <tr>
-        <th>Name</th>
-      </tr>
-      {tags.map((tag) => {
-        return (
-          <tr key={tag.PK + tag.SK}>
-            <td>{tag.Name}</td>
-          </tr>
-        );
-      })}
-    </table>
+    <>
+      <div className={styles.tableContainer}>
+        <table
+          className={styles.responsiveTable}
+          aria-label="tags table"
+          data-test="tagsTable"
+        >
+          <tbody>
+            {tagData.Tags.map((tag) => {
+              return (
+                <tr key={tag.PK + tag.SK}>
+                  <td>
+                    <Link href="#">{tag.Name}</Link>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <div className={styles.paginationContainer}>
+        <Pagination nextPage={nextPage} />
+      </div>
+    </>
   );
 }
